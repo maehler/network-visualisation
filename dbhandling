@@ -1,8 +1,0 @@
--- creates the database 
-sqlite3 ignv.db
-
--- creates table for the nodes
-CREATE TABLE nodes(
-node_id integer primary key, 
-node_name text not null
-);
