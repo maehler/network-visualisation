@@ -14,8 +14,8 @@ CREATE TABLE IF NOT EXISTS edge(
     node1 integer not null,
     node2 integer not null,
     directionality integer not null,
-    FOREIGN KEY(node1) REFERENCES nodes(node_id)
-    FOREIGN KEY(node2) REFERENCES nodes(node_id)
+    FOREIGN KEY(node1) REFERENCES node(node_id)
+    FOREIGN KEY(node2) REFERENCES node(node_id)
 );
 CREATE TABLE IF NOT EXISTS module(
     name text not null,
