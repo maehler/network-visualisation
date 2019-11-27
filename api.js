@@ -4,8 +4,11 @@ var bodyParser = require("body-parser");
 var cors = require("corser");
 var sqlite3 = require("sqlite3").verbose();
 var path = require('path');
-//const dbPath = "~/home/jacob/Dokument/Växtprojekt/sqlserver/ignv.db";
+var util = require("util");
+var flag = 0;
 const dbPath = path.resolve("/home/jacob/Dokument/Växtprojekt/sqlserver", "ignv.db")
+
+
 
 //Inititializes the database connection
 var db = new sqlite3.Database(dbPath,(err) => {
@@ -20,10 +23,36 @@ db.all(sql, [], (err,rows) => {
   if(err){
     console.error(err.message);
   }
-  rows.forEach((row)=>{
-    data.push(row);
+    apidata =[]
+    for(var i=0, row; row = rows[i]; i++){
+      //Loops through all the rows of data, saving distinct ids
+      flag = 0;
+      if(apidata.length == 0){//If the apidata is empty, add the first object
+        apidata =[{"id":row["id"],"name":row["name"],"node2":[row["node2"]]}]
+        console.log(apidata)
+      }else{
+        for (var j = 0, apiItem; apiItem = apidata[j]; j++){
+          /*
+            Identifies matching id's. If there is a matching id, it appends
+            node edges.
+          */
+          if(row.id == apiItem.id){
+            if(!(row["node2"] == apiItem['node2'])){
+              apidata[j]["node2"].push(row["node2"]);
+              flag = 1;
+              break
+            }else if(apidata.length == i-1){
+              flag = 1;
+              break;
+            }
+          }
+        }
+        if (flag !=1){//If there are no mathcing id's, it add this new id
+          apidata.push({"id":row["id"],"name":row["name"],"node2":[row["node2"]]});
+        }
+      }
+    };
   });
-});
 
 db.close((err) =>{
   if(err){
@@ -31,12 +60,13 @@ db.close((err) =>{
   }
   console.log('Close the database connection.');
 })
-// Configuring body parser middleware
-router.use(bodyParser.urlencoded({ extended: false }));
-router.use(bodyParser.json());
+
 
 router.get('/', (req, res) => {
-    return res.send(Object.values(data));
+    return res.send(Object.values(apidata));
 });
+router.post('/', (req, res)=> {
+  return res.send(Object.values(apidata))
+})
 
 module.exports = router;
