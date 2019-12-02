@@ -26,7 +26,6 @@ db.all(sql, [], (err,rows) => {
       flag = 0;
       if(apidata.length == 0){//If the apidata is empty, add the first object
         apidata =[{"id":row["id"],"name":row["name"],"node2":[row["node2"]]}]
-        console.log(apidata)
       }else{
         for (var j = 0, apiItem; apiItem = apidata[j]; j++){
           /*
@@ -37,7 +36,7 @@ db.all(sql, [], (err,rows) => {
             if(!(row["node2"] == apiItem['node2'])){
               apidata[j]["node2"].push(row["node2"]);
               flag = 1;
-              break
+              break;
             }else if(apidata.length == i-1){
               flag = 1;
               break;
@@ -57,5 +56,5 @@ db.close((err) =>{
   }
   console.log('Close the database connection.');
   module.exports.apidata = apidata
-  
+
 })

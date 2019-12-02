@@ -12,6 +12,9 @@ var cytoscape = require("cytoscape");
 
 var app = express();
 
+
+
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -23,8 +26,8 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/js', jsRouter);
 //app.get('/', function(req, res) {});
-app.get('/api', (req,res)=>{
-  console.log(req.json(apidata));
+app.get('/', (req,res)=>{
+  console.log(res.json(apidata));
 });
 app.listen(3000, function() {
   console.log('Example app listening on port 3000!');
