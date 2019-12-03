@@ -16,6 +16,7 @@ id integer primary key,
 name text not null
 );
 CREATE TABLE IF NOT EXISTS edge(
+id integer primary key,
 node1 integer not null,
 node2 integer not null,
 directionality integer not null,

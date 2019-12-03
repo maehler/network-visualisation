@@ -75,7 +75,7 @@ def fetchEdgeInserts(nodes, edges):
     return edgeinserts
 edgeinserts = fetchEdgeInserts(nodes, edgenames)
 for item in edgeinserts:
-    c.executemany("INSERT INTO edge VALUES(?,?,?)", (item,))
+    c.executemany("INSERT INTO edge VALUES(NULL,?,?,?)", (item,))
 
 def fetch_n_m_inserts(nodes, modules):
     n_m_inserts = []

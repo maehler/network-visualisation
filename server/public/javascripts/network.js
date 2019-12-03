@@ -1,42 +1,39 @@
-var cy = cytoscape({
 
+async function test(){
+  const response = await fetch("/api");
+  const json = await response.json();
+  return json
+}
+test().then(json =>{
+  console.log(json);
+  var cy = cytoscape({
   container: document.getElementById('cy'), // container to render in
 
-  elements: [ // list of graph elements to start with
-    { // node a
-      data: { id: 'a' }
-    },
-    { // node b
-      data: { id: 'b' }
-    },
-    { // edge ab
-      data: { id: 'ab', source: 'a', target: 'b' }
-    }
-  ],
+    elements: json,
 
-  style: [ // the stylesheet for the graph
-    {
-      selector: 'node',
-      style: {
-        'background-color': '#666',
-        'label': 'data(id)'
+    style: [ // the stylesheet for the graph
+      {
+        selector: 'node',
+        style: {
+          'background-color': '#666',
+          'label': 'data(id)'
+        }
+      },
+
+      {
+        selector: 'edge',
+        style: {
+          'width': 3,
+          'line-color': '#ccc',
+          'target-arrow-color': '#ccc',
+          'target-arrow-shape': 'triangle'
+        }
       }
-    },
+    ],
 
-    {
-      selector: 'edge',
-      style: {
-        'width': 3,
-        'line-color': '#ccc',
-        'target-arrow-color': '#ccc',
-        'target-arrow-shape': 'triangle'
-      }
+    layout: {
+      name: 'circle',
     }
-  ],
-
-  layout: {
-    name: 'grid',
-    rows: 1
-  }
-
-});
+  });
+  
+})
