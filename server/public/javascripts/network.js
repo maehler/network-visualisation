@@ -8,9 +8,7 @@ test().then(json =>{
   console.log(json);
   var cy = cytoscape({
   container: document.getElementById('cy'), // container to render in
-
     elements: json,
-
     style: [ // the stylesheet for the graph
       {
         selector: 'node',
@@ -35,5 +33,5 @@ test().then(json =>{
       name: 'circle',
     }
   });
-  
+
 })
