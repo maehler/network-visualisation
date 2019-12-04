@@ -30,7 +30,7 @@ test().then(json =>{
     ],
 
     layout: {
-      name: 'circle',
+      name: 'concentric',
     }
   });
 
