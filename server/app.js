@@ -25,10 +25,8 @@ app.use('/api', apiRouter);
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/js', jsRouter);
-//app.get('/', function(req, res) {});
-app.get('/', (req,res)=>{
-  console.log(res.json(apidata));
-});
+// app.get('/api/:', function(req, res) {});
+
 app.listen(3000, function() {
   console.log('Example app listening on port 3000!');
 });

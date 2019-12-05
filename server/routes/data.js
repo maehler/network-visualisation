@@ -9,30 +9,30 @@ var db = new sqlite3.Database(dbPath,(err) => {
   if (err){
     return console.error(err.message);
   }
-  console.log("connected yo");
-});
-let nodesql = 'SELECT n.id, m.m_id, n.name FROM node n inner join node_module m on m.n_id = n.id;';
-let edgesql = 'SELECT * FROM edge;';
-data =[];
-db.serialize(() => {
-  db.each(nodesql, [], (err,row)=>{
+  console.log("Connected yo");
+  });
+  let nodesql = 'SELECT n.id, m.m_id, n.name FROM node n inner join node_module m on m.n_id = n.id;';
+  let edgesql = 'SELECT * FROM edge;';
+  data =[];
+  db.serialize(() => {
+    db.each(nodesql, [], (err,row)=>{
+      if(err){
+        console.error(err.message);
+      }
+      data.push({"group":"nodes", "data":{"id":row.id.toString(), "name":row.name.toString(), "module":row.m_id.toString()}});
+    })
+    .each(edgesql, [], (err, row)=>{
+      if(err){
+        console.error(err.message);
+      }
+      data.push({"group":"edges", "data":{"id":("e"+row.id.toString()), "source":row.node1.toString(), "target":row.node2.toString()}});
+    })
+  });
+    db.close((err) =>{
     if(err){
-      console.error(err.message);
+      return console.error(err.message);
     }
-    data.push({"group":"nodes", "data":{"id":row.id.toString(), "name":row.name.toString(), "module":row.m_id.toString()}});
-  })
-  .each(edgesql, [], (err, row)=>{
-    if(err){
-      console.error(err.message);
-    }
-    data.push({"group":"edges", "data":{"id":("e"+row.id.toString()), "source":row.node1.toString(), "target":row.node2.toString()}});
-  })
-});
-
-db.close((err) =>{
-  if(err){
-    return console.error(err.message);
-  }
   console.log('Close the database connection.');
-  module.exports.data = data;
+  return data;
 })
+module.exports.data = data
