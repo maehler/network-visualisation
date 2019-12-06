@@ -2,12 +2,12 @@ var express = require('express');
 var router = express.Router();
 var bodyParser = require("body-parser");
 var cors = require("corser");
-var apidata = require('./data')
+var test = require('./data')
+data = test()
 
 router.get('/', (req, res) => {
-  res.json(apidata.data);
+  console.log(test)
+  res.json(test);
 });
-router.get('/:module', (req, res)=>{
-   res.json(apidata.data.filter(modules => modules.data.module === req.params.module))
-})
+
 module.exports = router;

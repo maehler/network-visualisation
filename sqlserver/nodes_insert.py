@@ -1,3 +1,4 @@
+# Here there be dragons
 import sqlite3
 
 def fetchnodenames(filename):
