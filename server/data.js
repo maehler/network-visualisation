@@ -2,28 +2,60 @@
 const db = require("better-sqlite3")("../sqlserver/ignv.db");
 var util = require("util");
 
-// Inititializes the database connection
+
+function pushEdges(obj, array){
+  array.push({
+    "group":"edges",
+    "data":{
+      "id":("e"+obj.id),
+      "source":obj.node1,
+      "target":obj.node2,
+      "directionality":obj.directionality === 1}});
+}
+
+function pushNodes(obj, array){
+  array.push(
+    {"group":"nodes",
+    "data":{
+      "id":obj.id,
+      "name":obj.name}});
+}
+
 var getNetwork = function(){
-    edgeinsert = 'select * from edge;';
-    nodeinsert = 'SELECT n.id, m.m_id, n.name FROM node n inner join node_module m on m.n_id = n.id;';
-    apidata = [];
-    for(const edge of db.prepare(edgeinsert).iterate()){
-      apidata.push({
-        "group":"edges",
-        "data":{
-          "id":("e"+edge.id),
-          "source":edge.node1,
-          "target":edge.node2}});
+    edgeInsert = 'select * from edge;';
+    nodeInsert = 'SELECT n.id, n.name FROM node n;';
+    apiData = [];
+    for(const edge of db.prepare(edgeInsert).iterate()){
+      pushEdges(edge, apiData)
     }
-    for(const node of db.prepare(nodeinsert).iterate()){
-      apidata.push(
-        {"group":"nodes",
-        "data":{
-          "id":node.id,
-          "name":node.name,
-          "module":node.m_id}});
+    for(const node of db.prepare(nodeInsert).iterate()){
+      pushNodes(node, apiData)
     }
-    return apidata;
+    return apiData;
+  }
+function getModule(moduleId) {
+      var nodeInsert = "SELECT id, name FROM node INNER JOIN node_module ON node_module.n_id = node.id WHERE node_module.m_id = ?";
+
+      var apiData = [];
+      var nodeId = [];
+      for (const node of db.prepare(nodeInsert).iterate(moduleId)) {
+          nodeId.push(node.id);
+          pushNodes(node, apiData);
+      }
+
+      var qMarks = ""
+      for (nId in nodeId) {
+          qMarks += "?,";
+      }
+      qMarks = qMarks.replace(/,$/, "");
+
+      var edgeInsert = `SELECT node1, node2, directionality FROM edge WHERE node1 IN (${qMarks}) AND node2 IN (${qMarks})`;
+      for (const edge of db.prepare(edgeInsert).iterate(...nodeId, ...nodeId)) {
+          pushEdges(edge, apiData)
+      }
+
+      return apiData;
   }
 
 module.exports.getNetwork = getNetwork;
+module.exports.getModule = getModule;

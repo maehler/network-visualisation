@@ -4,8 +4,10 @@ var controller = require('../networkdata.js')
 var bodyParser = require("body-parser");
 var cors = require("corser");
 
+console.log(controller.getNetwork, controller.getModule)
 
+router.get('/', controller.getNetwork);
 
-router.get('/network', controller.getNetwork);
+router.get('/module/:module_id', controller.getModule)
 
 module.exports = router;
