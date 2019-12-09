@@ -5,7 +5,7 @@ async function test(){
   return json
 }
 test().then(json =>{
-  console.log(json);
+  console.log(json);//debuggin reasons
   var cy = cytoscape({
   container: document.getElementById('cy'), // container to render in
     elements: json,
@@ -13,6 +13,8 @@ test().then(json =>{
       {
         selector: 'node',
         style: {
+          'height': (node) => node.degree(),
+          'width': "node.degree",
           'background-color': '#666',
           'label': 'data(id)'
         }
@@ -33,5 +35,6 @@ test().then(json =>{
       name: 'concentric',
     }
   });
+  console.log(cy.style())
 
 })
