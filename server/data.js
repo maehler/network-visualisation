@@ -4,6 +4,7 @@ var util = require("util");
 
 
 function pushEdges(obj, array){
+  console.log(obj)
   array.push({
     "group":"edges",
     "data":{
@@ -49,13 +50,14 @@ function getModule(moduleId) {
       }
       qMarks = qMarks.replace(/,$/, "");
 
-      var edgeInsert = `SELECT node1, node2, directionality FROM edge WHERE node1 IN (${qMarks}) AND node2 IN (${qMarks})`;
+      var edgeInsert = `SELECT id, node1, node2, directionality FROM edge WHERE node1 IN (${qMarks}) AND node2 IN (${qMarks})`;
       for (const edge of db.prepare(edgeInsert).iterate(...nodeId, ...nodeId)) {
           pushEdges(edge, apiData)
       }
 
       return apiData;
   }
+
 
 module.exports.getNetwork = getNetwork;
 module.exports.getModule = getModule;
