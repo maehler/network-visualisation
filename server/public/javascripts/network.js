@@ -1,6 +1,6 @@
 
 async function test(){
-  const response = await fetch("/api");
+  const response = await fetch("/api/module/1");
   const json = await response.json();
   return json
 }
@@ -11,10 +11,28 @@ test().then(json =>{
     elements: json,
     style: [ // the stylesheet for the graph
       {
-        selector: 'node',
+        selector: 'node[[degree = 1]]',
         style: {
-          'height': (node) => node.degree(),
-          'width': "node.degree",
+          'height': 3,
+          'width': 3,
+          'background-color': '#666',
+          'label': 'data(id)'
+        }
+      },
+      {
+        selector: 'node[[degree >= 2]][[degree <= 9]]',
+        style: {
+          'height': 15,
+          'width': 15,
+          'background-color': '#666',
+          'label': 'data(id)'
+        }
+      },
+      {
+        selector: 'node[[degree >= 10]]',
+        style: {
+          'height': 30,
+          'width': 30,
           'background-color': '#666',
           'label': 'data(id)'
         }
@@ -23,7 +41,7 @@ test().then(json =>{
       {
         selector: 'edge',
         style: {
-          'width': 3,
+          'width': 1,
           'line-color': '#ccc',
           'target-arrow-color': '#ccc',
           'target-arrow-shape': 'triangle'
@@ -35,6 +53,6 @@ test().then(json =>{
       name: 'concentric',
     }
   });
-  console.log(cy.style())
+  console.log('test')
 
 })
