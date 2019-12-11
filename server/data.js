@@ -57,6 +57,35 @@ function getModule(moduleId) {
       return apiData;
   }
 
+function getSingleGene(name){
+  var apiData =[];
+  var nodeIds =[];
+  var qMarks = ''
+  var edgeInsert = 'SELECT * FROM edge WHERE node1 = ?';
+  var getNodeId = "SELECT id FROM node WHERE name = ?";
 
+
+
+
+  for (const node of db.prepare(getNodeId).iterate(name)){
+    var id = node;
+  }
+  for (const edge of db.prepare(edgeInsert).iterate(id.id)){
+    pushEdges(edge, apiData);
+    nodeIds.push(edge.node1, edge.node2)
+  }
+  for(nodeId in nodeIds){
+    qMarks += "?,"
+  }
+  qMarks = qMarks.replace(/,$/, "");
+  var nodeInserts = `SELECT * FROM node WHERE id IN (${qMarks}) OR id IN (${qMarks})`
+
+  for(const nodes of db.prepare(nodeInserts).iterate(...nodeIds, ...nodeIds)){
+    pushNodes(nodes, apiData);
+  }
+  return apiData;
+}
+
+getSingleGene("AT2G07714")
 module.exports.getNetwork = getNetwork;
 module.exports.getModule = getModule;
