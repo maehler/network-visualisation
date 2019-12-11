@@ -15,8 +15,13 @@ a {
   left: 0px;
 }
 
-#form {
+#module{
   position: absolute;
   top: 150px;
+  left: 50px;
+}
+#gene{
+  position: absolute;
+  top: 220px;
   left: 50px;
 }
