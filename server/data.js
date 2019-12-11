@@ -4,7 +4,6 @@ var util = require("util");
 
 
 function pushEdges(obj, array){
-  console.log(obj)
   array.push({
     "group":"edges",
     "data":{
