@@ -8,5 +8,12 @@ function getNetwork(req, res){
 function getModule(req, res){
   res.json(model.getModule(req.params.module_id));
 }
+
+function getSingleGene(req, res){
+  res.json(model.getSingleGene(req.query.name));
+}
+
+
+module.exports.getSingleGene = getSingleGene;
 module.exports.getNetwork = getNetwork;
 module.exports.getModule = getModule;

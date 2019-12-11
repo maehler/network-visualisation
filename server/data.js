@@ -64,28 +64,26 @@ function getSingleGene(name){
   var edgeInsert = 'SELECT * FROM edge WHERE node1 = ?';
   var getNodeId = "SELECT id FROM node WHERE name = ?";
 
-
-
-
   for (const node of db.prepare(getNodeId).iterate(name)){
     var id = node;
   }
+  nodeIds.push(id.id)
   for (const edge of db.prepare(edgeInsert).iterate(id.id)){
     pushEdges(edge, apiData);
-    nodeIds.push(edge.node1, edge.node2)
+    nodeIds.push(edge.node2)
   }
   for(nodeId in nodeIds){
     qMarks += "?,"
   }
   qMarks = qMarks.replace(/,$/, "");
-  var nodeInserts = `SELECT * FROM node WHERE id IN (${qMarks}) OR id IN (${qMarks})`
 
-  for(const nodes of db.prepare(nodeInserts).iterate(...nodeIds, ...nodeIds)){
+  var nodeInserts = `SELECT * FROM node WHERE id IN (${qMarks})`
+  for(const nodes of db.prepare(nodeInserts).iterate(...nodeIds)){
     pushNodes(nodes, apiData);
   }
   return apiData;
 }
 
-getSingleGene("AT2G07714")
+module.exports.getSingleGene = getSingleGene;
 module.exports.getNetwork = getNetwork;
 module.exports.getModule = getModule;

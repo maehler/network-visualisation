@@ -10,4 +10,5 @@ router.get('/', controller.getNetwork);
 
 router.get('/module/:module_id', controller.getModule)
 
+router.get('/gene', controller.getSingleGene)
 module.exports = router;
