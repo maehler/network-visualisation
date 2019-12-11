@@ -1,14 +1,16 @@
 
 
 
-var form = document.getElementById('form')
-var input = document.getElementsByClassName('input')
+var form = document.getElementById('module')
+var input = document.getElementsByClassName('module_input')
+//
+// var gene = document.getElementById("gene")
+// var gene_input = document.getElementById("gene_input")
 
 
-
-async function getApi(module_id){
-  if(module_id){
-    const response = await fetch(`/api/module/${module_id}`);
+async function getApi(idOrName){
+  if(idOrName){
+    const response = await fetch(idOrName);
     const json = await response.json();
     return json
   }else{
@@ -25,7 +27,7 @@ function iniCy(json){
     elements: json,
     style: [ // the stylesheet for the graph
       {
-        selector: 'node[[degree = 1]]',
+        selector: 'node[[degree <= 1]]',
         style: {
           'height': 3,
           'width': 3,
@@ -71,7 +73,12 @@ function iniCy(json){
 }
 form.addEventListener('submit',function(e){
   e.preventDefault();
-  // console.log(form[0]);
-  getApi(form[0].value).then((json)=>{iniCy(json);})
+  getApi('/api/module/'+form[0].value).then((json)=>{
+    iniCy(json);})
 })
-// btn.addEventListener('click', function(){getApi("1").then((json)=>{iniCy(json);})})
+
+gene.addEventListener('submit',function(e){
+  e.preventDefault();
+  getApi('/api/gene?name='+gene[0].value).then((json)=>{
+    iniCy(json);})
+})
