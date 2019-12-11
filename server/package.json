@@ -12,6 +12,7 @@
     "cookie-parser": "~1.4.4",
     "corser": "^2.0.1",
     "cytoscape": "^3.12.1",
+    "cytoscape-cose-bilkent": "^4.1.0",
     "debug": "~2.6.9",
     "express": "~4.16.1",
     "morgan": "~1.9.1",
