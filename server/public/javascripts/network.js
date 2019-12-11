@@ -1,11 +1,25 @@
 
-async function test(){
-  const response = await fetch("/api/module/1");
-  const json = await response.json();
-  return json
+
+
+var form = document.getElementById('form')
+var input = document.getElementsByClassName('input')
+
+
+
+async function getApi(module_id){
+  if(module_id){
+    const response = await fetch(`/api/module/${module_id}`);
+    const json = await response.json();
+    return json
+  }else{
+    const response = await fetch(`/api/`);
+    const json = await response.json();
+    return json
+  }
 }
-test().then(json =>{
-  console.log(json);//debuggin reasons
+
+function iniCy(json){
+  // console.log(json);//debuggin reasons
   var cy = cytoscape({
   container: document.getElementById('cy'), // container to render in
     elements: json,
@@ -16,25 +30,25 @@ test().then(json =>{
           'height': 3,
           'width': 3,
           'background-color': '#666',
-          'label': 'data(id)'
+          // 'label': 'data(id)'
         }
       },
       {
         selector: 'node[[degree >= 2]][[degree <= 9]]',
         style: {
-          'height': 15,
-          'width': 15,
+          'height': 10,
+          'width': 10,
           'background-color': '#666',
-          'label': 'data(id)'
+          // 'label': 'data(id)'
         }
       },
       {
         selector: 'node[[degree >= 10]]',
         style: {
-          'height': 30,
-          'width': 30,
+          'height': 13,
+          'width': 13,
           'background-color': '#666',
-          'label': 'data(id)'
+          // 'label': 'data(id)'
         }
       },
 
@@ -50,9 +64,14 @@ test().then(json =>{
     ],
 
     layout: {
-      name: 'concentric',
+      name: 'cose',
+      animationduration: 1000
     }
   });
-  console.log('test')
-
+}
+form.addEventListener('submit',function(e){
+  e.preventDefault();
+  // console.log(form[0]);
+  getApi(form[0].value).then((json)=>{iniCy(json);})
 })
+// btn.addEventListener('click', function(){getApi("1").then((json)=>{iniCy(json);})})

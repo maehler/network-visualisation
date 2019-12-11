@@ -10,10 +10,13 @@
   <h1>Express</h1>
   <p>Welcome to Express</p>
   <div id="cy"> </div>
-  <form id="myForm" method ="post">
-  Module id: <input type="text" name="module_id"><br>
-  <input type="button" onclick="javascripts/network.js" value="Submit form">
+  <div>
+    <form id="form">
+    <label>Module choice: <input type="text" value="" id="input"></label>
+    <br><br>
+    <button type="submit">Submit form</button>
   </form>
+  </div>
   <script src="js/cytoscape.min.js"></script>
   <script src="javascripts/network.js"></script>
 </body>
