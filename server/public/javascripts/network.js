@@ -9,7 +9,8 @@ var input = document.getElementsByClassName('module_input')
 
 
 async function getApi(idOrName){
-  if(idOrName){
+  console.log(!(idOrName=='/api/module/'))
+  if(idOrName && (!(idOrName == '/api/module/'))){
     const response = await fetch(idOrName);
     const json = await response.json();
     return json
@@ -58,16 +59,24 @@ function iniCy(json){
         selector: 'edge',
         style: {
           'width': 1,
-          'line-color': '#ccc',
-          'target-arrow-color': '#ccc',
-          'target-arrow-shape': 'triangle'
+          'line-color': '#ccf',
+          'curve-style':'straight',
         }
+      },
+
+      {
+      selector: 'edge[?directionality]',
+      style : {
+        'target-arrow-color': '#ccf',
+        'target-arrow-shape': 'vee'
       }
+    }
     ],
 
     layout: {
       name: 'cose',
-      animationduration: 1000
+      animate : 'end',
+      animationduration: 5000
     }
   });
 }
