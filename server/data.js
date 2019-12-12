@@ -60,27 +60,29 @@ function getModule(moduleId) {
 function getSingleGene(name){
   var apiData =[];
   var nodeIds =[];
-  var qMarks = ''
-  var edgeInsert = 'SELECT * FROM edge WHERE node1 = ?';
+  var qMarks = '';
+  var edgeInsert = 'SELECT * FROM edge WHERE node1 = ? OR node2 = ?';
   var getNodeId = "SELECT id FROM node WHERE name = ?";
 
   for (const node of db.prepare(getNodeId).iterate(name)){
     var id = node;
   }
-  nodeIds.push(id.id)
-  for (const edge of db.prepare(edgeInsert).iterate(id.id)){
+  nodeIds.push(id.id);
+  console.log(id.id);
+  for (const edge of db.prepare(edgeInsert).iterate(id.id, id.id)){
     pushEdges(edge, apiData);
-    nodeIds.push(edge.node2)
+    nodeIds.push(edge.node2, edge.node1);
   }
   for(nodeId in nodeIds){
-    qMarks += "?,"
+    qMarks += "?,";
   }
   qMarks = qMarks.replace(/,$/, "");
-
+  console.log(nodeIds)
   var nodeInserts = `SELECT * FROM node WHERE id IN (${qMarks})`
   for(const nodes of db.prepare(nodeInserts).iterate(...nodeIds)){
     pushNodes(nodes, apiData);
   }
+  // console.log(apiData)
   return apiData;
 }
 
