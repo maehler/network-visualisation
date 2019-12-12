@@ -74,9 +74,8 @@ function iniCy(json){
     ],
 
     layout: {
-      name: 'cose',
-      animate : 'end',
-      animationduration: 5000
+      name: 'cose-bilkent',
+      animate : 'end'
     }
   });
 }
