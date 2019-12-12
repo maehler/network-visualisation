@@ -68,7 +68,7 @@ function getSingleGene(name){
     var id = node;
   }
   nodeIds.push(id.id);
-  console.log(id.id);
+
   for (const edge of db.prepare(edgeInsert).iterate(id.id, id.id)){
     pushEdges(edge, apiData);
     nodeIds.push(edge.node2, edge.node1);
@@ -77,7 +77,7 @@ function getSingleGene(name){
     qMarks += "?,";
   }
   qMarks = qMarks.replace(/,$/, "");
-  console.log(nodeIds)
+  
   var nodeInserts = `SELECT * FROM node WHERE id IN (${qMarks})`
   for(const nodes of db.prepare(nodeInserts).iterate(...nodeIds)){
     pushNodes(nodes, apiData);
