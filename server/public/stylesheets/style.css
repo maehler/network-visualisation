@@ -25,3 +25,8 @@ a {
   top: 220px;
   left: 50px;
 }
+#search{
+  position: absolute;
+  top: 290px;
+  left: 50px;
+}

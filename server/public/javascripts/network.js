@@ -2,10 +2,10 @@
 
 
 var form = document.getElementById('module')
-var input = document.getElementsByClassName('module_input')
 
-var gene = document.getElementById("gene")
-var gene_input = document.getElementById("gene_input")
+var gene = document.getElementById('gene')
+
+var search = document.getElementById("search")
 
 
 async function getApi(idOrName){
@@ -82,19 +82,33 @@ function iniCy(json){
       animate : 'end'
     }
   });
-  cy.on('tap', 'node', function(evt){
-    var node = evt.target;
-    console.log( 'tapped ' + node.id() );
-  });
+  // cy.nodes().forEach(function(n){
+  //     var g = n.data('name');
+  //     var $links = [
+  //       {
+  //       name: 'arabidopsis.org',
+  //       url: 'https://www.arabidopsis.org/servlets/TairObject?name='+g+'&type=locus'
+  //       }
+  //     ]
+  //     console.log($links)
+  // });
+  search.addEventListener('submit',function(e){
+    e.preventDefault();
+    var gName = search.elements['search_input'].value
+    cy.nodes(`node[name= "${gName}"]`).select()
+  })
 }
+
 form.addEventListener('submit',function(e){
   e.preventDefault();
-  getApi('/api/module/'+form[0].value).then((json)=>{
+  var formVal = form.elements['module_input'].value
+  getApi('/api/module/'+formVal).then((json)=>{
     iniCy(json);})
 })
 
 gene.addEventListener('submit',function(e){
   e.preventDefault();
-  getApi('/api/gene?name='+gene[0].value).then((json)=>{
+  var gene_query = gene.elements['gene_input'].value
+  getApi('/api/gene?name='+gene_query).then((json)=>{
     iniCy(json);})
 })
