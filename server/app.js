@@ -10,7 +10,6 @@ var jsRouter = require('./routes/js');
 var sqlite3 = require("sqlite3").verbose();
 var cytoscape = require("cytoscape");
 var coseBilkent = require('cytoscape-cose-bilkent');
-
 cytoscape.use(coseBilkent);
 
 

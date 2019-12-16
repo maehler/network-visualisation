@@ -1,6 +1,5 @@
 
 
-
 var form = document.getElementById('module')
 
 var gene = document.getElementById('gene')
@@ -21,6 +20,26 @@ async function getApi(idOrName){
 }
 
 function iniCy(json){
+  var h = function(tag, attrs, children){
+      var el = document.createElement(tag);
+
+      Object.keys(attrs).forEach(function(key){
+        var val = attrs[key];
+
+        el.setAttribute(key, val);
+      });
+
+      children.forEach(function(child){
+        el.appendChild(child);
+      });
+
+      return el;
+    };
+    var t = function(text){
+      var el = document.createTextNode(text);
+
+      return el;
+    };
   // console.log(json);//debuggin reasons
   var cy = cytoscape({
   container: document.getElementById('cy'), // container to render in
@@ -74,6 +93,11 @@ function iniCy(json){
         'text-outline-color': '#888',
         'text-outline-width': 3,
       },
+    },{
+      selector: "edge.selected",
+      style: {
+        'background-color': '#fff',
+      },
     },
     ],
 
@@ -82,21 +106,69 @@ function iniCy(json){
       animate : 'end'
     }
   });
-  // cy.nodes().forEach(function(n){
-  //     var g = n.data('name');
-  //     var $links = [
-  //       {
-  //       name: 'arabidopsis.org',
-  //       url: 'https://www.arabidopsis.org/servlets/TairObject?name='+g+'&type=locus'
-  //       }
-  //     ]
-  //     console.log($links)
-  // });
+  var makeTippy = function(node, html){
+     return tippy( node.popperRef(), {
+       html: html,
+       trigger: 'manual',
+       arrow: true,
+       placement: 'bottom',
+       hideOnClick: false,
+       interactive: true
+     } ).tooltips[0];
+   };
+   var hideTippy = function(node){
+      var tippy = node.data('tippy');
+
+      if(tippy != null){
+        tippy.hide();
+      }
+    };
+   var hideAllTippies = function(){
+      cy.nodes().forEach(hideTippy);
+    };
+
+    cy.on('tap', function(e){
+      if(e.target === cy){
+        hideAllTippies();
+      }
+    });
+
+    cy.on('tap', 'edge', function(e){
+      hideAllTippies();
+    });
+
+    cy.on('zoom pan', function(e){
+      hideAllTippies();
+    });
+    cy.nodes().forEach(function(n){
+        var g = n.data('name');
+        var $links = [
+          {
+          name: 'arabidopsis.org',
+          url: 'https://www.arabidopsis.org/servlets/TairObject?name='+g+'&type=locus'
+          }
+        ].map(function( link ){
+        return h('a', { target: '_blank', href: link.url, 'class': 'tip-link' }, [ t(link.name) ]);
+    });
+    var tippy = makeTippy(n, h('div', {}, $links));
+
+      n.data('tippy', tippy);
+
+      n.on('click', function(e){
+        tippy.show();
+
+        cy.nodes().not(n).forEach(hideTippy);
+      });
+  });
   search.addEventListener('submit',function(e){
     e.preventDefault();
     var gName = search.elements['search_input'].value
-    cy.nodes(`node[name= "${gName}"]`).select()
-  })
+    if(cy.nodes(cy.nodes(`node[name= "${gName}"]`).select())){
+      cy.nodes(`node[name= "${gName}"]`).select()
+    }else{
+      console.log('Gene not found')
+    }
+    })
 }
 
 form.addEventListener('submit',function(e){
