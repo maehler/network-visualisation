@@ -144,9 +144,12 @@ function iniCy(json){
         var g = n.data('name');
         var $links = [
           {
-          name: 'arabidopsis.org',
+          name: 'Arabidopsis.org',
           url: 'https://www.arabidopsis.org/servlets/TairObject?name='+g+'&type=locus'
-          }
+        },{
+          name: "Uniprot search",
+          url : 'https://www.uniprot.org/uniprot/?query='+g+'&sort=score'
+        },
         ].map(function( link ){
         return h('a', { target: '_blank', href: link.url, 'class': 'tip-link' }, [ t(link.name) ]);
     });

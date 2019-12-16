@@ -30,3 +30,9 @@ a {
   top: 290px;
   left: 50px;
 }
+*{
+  font-family: Arial;
+}
+.tip-link {
+  display: block;
+}
