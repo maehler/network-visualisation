@@ -56,7 +56,16 @@ function getModule(moduleId) {
 
       return apiData;
   }
+  function containsObject(obj, list) {
+      var i;
+      for (i = 0; i < list.length; i++) {
+          if (list[i] === obj) {
+              return true;
+          }
+      }
 
+      return false;
+  }
 function getSingleGene(name){
   var apiData =[];
   var nodeIds =[];
@@ -82,7 +91,12 @@ function getSingleGene(name){
   for(const nodes of db.prepare(nodeInserts).iterate(...nodeIds)){
     pushNodes(nodes, apiData);
   }
-  // console.log(apiData)
+  var secondEdgeInsert = `SELECT * FROM edge WHERE node1 IN (${qMarks}) AND node2 IN (${qMarks})`;
+  for(const edge of db.prepare(secondEdgeInsert).iterate(...nodeIds, ...nodeIds)){
+    if (!(containsObject(edge, apiData))){
+      pushEdges(edge, apiData)
+    }
+  }
   return apiData;
 }
 
