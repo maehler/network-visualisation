@@ -53,8 +53,8 @@ function iniCy(json){
       },{
         selector: 'node[[degree <= 1]]',
         style: {
-          'height': 3,
-          'width': 3,
+          'height': 6,
+          'width': 6,
           // 'label': 'data(id)'
         }
       },{
