@@ -12,12 +12,12 @@
   <div id="cy"> </div>
   <div>
     <form id="module">
-      <label>Module choice: <input type="text" value = '' name='module_input'></label>
+      <label>Module choice: <input class ='typeahead'type="text" value = '' name='module_input'></label>
       <br><br>
       <button type="submit">Submit form</button>
     </form>
     <form id="gene">
-      <label>Gene name: <input type="text" value="AT2G07775" name="gene_input"></label>
+      <label>Gene name: <input type="text" class= 'typeahead' value="AT2G07775" name="gene_input"></label>
       <br><br>
       <button type="submit">Submit form</button>
     </form>
@@ -27,6 +27,9 @@
       <button type="submit">Submit form</button>
     </form>
   </div>
+  <!-- <div id="the-basics">
+  <input class="typeahead" type="text" placeholder="States of USA"> -->
+</div>
   <script src="js/cytoscape.min.js"></script>
   <script src="https://unpkg.com/layout-base/layout-base.js"></script>
   <script src="https://unpkg.com/cose-base/cose-base.js"></script>
@@ -34,6 +37,10 @@
   <script src="https://unpkg.com/popper.js@1.14.4/dist/umd/popper.js"></script>
   <script src="https://unpkg.com/tippy.js@2.6.0/dist/tippy.all.js"></script>
   <script src="javascripts/network.js"></script>
+  <script src="js/jquery.min.js"></script>
+  <script src ='js/typeahead.jquery.min.js'></script>
+  <script src ='js/bloodhound.min.js'></script>
+  <script src="javascripts/search_matches.js"></script>
   <script src="https://unpkg.com/cytoscape-popper@1.0.2/cytoscape-popper.js"></script>
 
 </body>
