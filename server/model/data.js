@@ -115,7 +115,7 @@ function getOnlyGenes(){
   }
   return apiData;
 }
-
+module.exports.getModule = getModule;
 module.exports.getSingleGene = getSingleGene;
 module.exports.getNetwork = getNetwork;
 module.exports.getOnlyModules = getOnlyModules;
