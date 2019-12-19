@@ -49,6 +49,11 @@ function iniCy(json){
         selector: 'node',
         style:{
           'background-color': '#666',
+          'label':'data(name)',
+          'font-size':4,
+          'color': '#fff',
+          'text-outline-color': '#888',
+          'text-outline-width': 1,
         }
       },{
         selector: 'node[[degree <= 1]]',
@@ -89,6 +94,7 @@ function iniCy(json){
       style: {
         'background-color': '#A3CA88',
         'label':'data(name)',
+        'font-size':10,
         'color': '#fff',
         'text-outline-color': '#888',
         'text-outline-width': 3,
@@ -108,6 +114,7 @@ function iniCy(json){
       nodeRepulsion: 4500,
     }
   });
+  // Created popup elements when selecting nodes with links inside
   var makeTippy = function(node, html){
      return tippy( node.popperRef(), {
        html: html,
@@ -165,6 +172,7 @@ function iniCy(json){
         cy.nodes().not(n).forEach(hideTippy);
       });
   });
+  //Selects node thats in the search field
   search.addEventListener('submit',function(e){
     e.preventDefault();
     var gName = search.elements['search_input'].value
@@ -187,5 +195,7 @@ gene.addEventListener('submit',function(e){
   e.preventDefault();
   var gene_query = gene.elements['gene_input'].value
   getApi('/api/gene?name='+gene_query).then((json)=>{
-    iniCy(json);})
+    iniCy(json);
+    cy.nodes(`node[name = "${gene_query}"]`).select();
+  })
 })
