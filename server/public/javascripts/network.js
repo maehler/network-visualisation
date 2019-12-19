@@ -103,7 +103,9 @@ function iniCy(json){
 
     layout: {
       name: 'cose-bilkent',
-      animate : 'end'
+      animate : 'end',
+      nodeDimensionsIncludeLabels: false,
+      nodeRepulsion: 4500,
     }
   });
   var makeTippy = function(node, html){

@@ -16,12 +16,19 @@ var modules = new Bloodhound({
 
 // passing in `null` for the `options` arguments will result in the default
 // options being used
+
+
+$('#module .typeahead').typeahead(null, {
+  name: 'id',
+  source: modules
+});
+
 $('#gene .typeahead').typeahead(null, {
   name: 'name',
   source: genes
 });
 
-$('#module .typeahead').typeahead(null, {
-  name: 'id',
-  source: modules
+$('#search .typeahead').typeahead(null, {
+  name: 'name',
+  source: genes
 });
