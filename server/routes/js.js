@@ -13,5 +13,16 @@ router.get('/tippy.css', function(req, res ,next){
   res.sendFile('node_modules/tippy.js/dist/tippy.css', {root: '.'})
 })
 
+router.get('/jquery.min.js', function(req, res, next){
+  res.sendFile('node_modules/jquery/dist/jquery.min.js', {root:'.'})
+})
+
+router.get('/bloodhound.min.js', function(req,res, next){
+  res.sendFile('node_modules/typeahead.js/dist/bloodhound.min.js', {root:'.'})
+})
+
+router.get('/typeahead.jquery.min.js', function(req,res, next){
+  res.sendFile('node_modules/typeahead.js/dist/typeahead.jquery.min.js', {root:'.'})
+})
 
 module.exports = router;
