@@ -111,7 +111,10 @@ function iniCy(json){
       name: 'cose-bilkent',
       animate : 'end',
       nodeDimensionsIncludeLabels: false,
-      nodeRepulsion: 4500,
+      nodeRepulsion: 45000,
+      avoidOverlap: true,
+      idealEdgeLength: 120,
+
     }
   });
   // Created popup elements when selecting nodes with links inside
