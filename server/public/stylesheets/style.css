@@ -6,6 +6,11 @@ body {
 a {
   color: #00B7FF;
 }
+#check{
+  position: absolute;
+  left: 50px;
+  top: 600px;
+}
 #cy {
 
   width: 100%;

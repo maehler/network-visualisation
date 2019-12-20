@@ -6,6 +6,11 @@ var gene = document.getElementById('gene')
 
 var search = document.getElementById("search")
 
+var checkbox = document.getElementById("checkbox");
+
+var checkbox2 = document.getElementById("checkbox2");
+console.log(checkbox)
+
 
 async function getApi(idOrName){
   if(idOrName && (!(idOrName == '/api/module/'))){
@@ -184,7 +189,49 @@ function iniCy(json){
     }else{
       console.log('Gene not found')
     }
-    })
+  });
+  checkbox.addEventListener( 'change', function() {
+    if(this.checked) {
+      cy.style()
+      .selector('edge[?directionality]')
+      .style({
+        'display': 'none',
+      })
+
+      .update() // indicate the end of your new stylesheet so that it can be updated on elements
+      ;
+      } else {
+        cy.style()
+        .selector('edge[?directionality]')
+        .style({
+          'display': 'element',
+        })
+
+        .update() // indicate the end of your new stylesheet so that it can be updated on elements
+        ;
+      }
+    });
+    checkbox2.addEventListener( 'change', function() {
+      if(this.checked) {
+        cy.style()
+        .selector('edge[!directionality]')
+        .style({
+          'display': 'none',
+        })
+
+        .update() // indicate the end of your new stylesheet so that it can be updated on elements
+        ;
+        } else {
+          cy.style()
+          .selector('edge[!directionality]')
+          .style({
+            'display': 'element',
+          })
+
+          .update() // indicate the end of your new stylesheet so that it can be updated on elements
+          ;
+        }
+      });
 }
 
 form.addEventListener('submit',function(e){
