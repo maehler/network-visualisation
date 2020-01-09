@@ -13,7 +13,15 @@ var checkbox2 = document.getElementById("checkbox2");
 var reset = document.getElementById("reset1");
 
 var cy;
-
+search.addEventListener('submit',function(e){
+  e.preventDefault();
+  var gName = search.elements['search_input'].value
+  if(cy.nodes(`node[name= "${gName}"]`).select().size() != 0){
+    cy.nodes(`node[name= "${gName}"]`).select()
+  }else{
+    alert("Gene cannot be found in currently displayed graph")
+  }
+});
 async function getApi(idOrName){
   if(idOrName && (!(idOrName == '/api/module/'))){
     const response = await fetch(idOrName);
@@ -185,15 +193,7 @@ function iniCy(json){
       });
   });
   //Selects node thats in the search field
-  search.addEventListener('submit',function(e){
-    e.preventDefault();
-    var gName = search.elements['search_input'].value
-    if(cy.nodes(`node[name= "${gName}"]`).select().size() != 0){
-      cy.nodes(`node[name= "${gName}"]`).select()
-    }else{
-      alert("Gene cannot be found in currently displayed graph")
-    }
-  });
+
   checkbox.addEventListener( 'change', function() {
     if(this.checked) {
       cy.style().selector('edge[?directionality]').style({'display': 'none',}).update() // indicate the end of your new stylesheet so that it can be updated on elements
