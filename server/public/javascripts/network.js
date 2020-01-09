@@ -13,6 +13,7 @@ var checkbox2 = document.getElementById("checkbox2");
 var reset = document.getElementById("reset1");
 
 var cy;
+
 search.addEventListener('submit',function(e){
   e.preventDefault();
   var gName = search.elements['search_input'].value
@@ -22,6 +23,54 @@ search.addEventListener('submit',function(e){
     alert("Gene cannot be found in currently displayed graph")
   }
 });
+
+form.addEventListener('submit',function(e){
+  e.preventDefault();
+  cy.destroy()
+})
+
+gene.addEventListener('submit',function(e){
+  e.preventDefault();
+  cy.destroy()
+})
+
+form.addEventListener('submit',function(e){
+  e.preventDefault();
+  var formVal = form.elements['module_input'].value
+  getApi('/api/module/'+formVal).then((json)=>{
+    iniCy(json);})
+})
+
+gene.addEventListener('submit',function(e){
+  e.preventDefault();
+  var gene_query = gene.elements['gene_input'].value
+  getApi('/api/gene?name='+gene_query).then((json)=>{
+    iniCy(json);
+  })
+})
+
+checkbox.addEventListener( 'change', function() {
+  if(this.checked) {
+    cy.style().selector('edge[?directionality]').style({'display': 'none',}).update() // indicate the end of your new stylesheet so that it can be updated on elements
+    ;} else {
+      cy.style().selector('edge[?directionality]').style({'display': 'element',})
+      .update() // indicate the end of your new stylesheet so that it can be updated on elements
+      ;}
+  });
+
+  checkbox2.addEventListener( 'change', function() {
+    if(this.checked) {
+      cy.style().selector('edge[!directionality]').style({'display': 'none',})
+      .update() // indicate the end of your new stylesheet so that it can be updated on elements
+      ;} else {
+        cy.style().selector('edge[!directionality]').style({'display': 'element',})
+        .update() // indicate the end of your new stylesheet so that it can be updated on elements
+        ;}
+    });
+  
+  reset1.addEventListener('click', function(){
+    cy.fit();
+  })
 async function getApi(idOrName){
   if(idOrName && (!(idOrName == '/api/module/'))){
     const response = await fetch(idOrName);
@@ -193,51 +242,4 @@ function iniCy(json){
       });
   });
   //Selects node thats in the search field
-
-  checkbox.addEventListener( 'change', function() {
-    if(this.checked) {
-      cy.style().selector('edge[?directionality]').style({'display': 'none',}).update() // indicate the end of your new stylesheet so that it can be updated on elements
-      ;} else {
-        cy.style().selector('edge[?directionality]').style({'display': 'element',})
-        .update() // indicate the end of your new stylesheet so that it can be updated on elements
-        ;}
-    });
-    checkbox2.addEventListener( 'change', function() {
-      if(this.checked) {
-        cy.style().selector('edge[!directionality]').style({'display': 'none',})
-        .update() // indicate the end of your new stylesheet so that it can be updated on elements
-        ;} else {
-          cy.style().selector('edge[!directionality]').style({'display': 'element',})
-          .update() // indicate the end of your new stylesheet so that it can be updated on elements
-          ;}
-      });
-    reset1.addEventListener('click', function(){
-      cy.fit();
-    })
-      form.addEventListener('submit',function(e){
-        e.preventDefault();
-        cy.destroy()
-        console.log(cy.destroyed())
-      })
-
-      gene.addEventListener('submit',function(e){
-        e.preventDefault();
-        cy.destroy()
-        console.log(cy.destroyed())
-      })
 }
-
-form.addEventListener('submit',function(e){
-  e.preventDefault();
-  var formVal = form.elements['module_input'].value
-  getApi('/api/module/'+formVal).then((json)=>{
-    iniCy(json);})
-})
-
-gene.addEventListener('submit',function(e){
-  e.preventDefault();
-  var gene_query = gene.elements['gene_input'].value
-  getApi('/api/gene?name='+gene_query).then((json)=>{
-    iniCy(json);
-  })
-})
