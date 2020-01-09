@@ -9,8 +9,10 @@ var search = document.getElementById("search")
 var checkbox = document.getElementById("checkbox");
 
 var checkbox2 = document.getElementById("checkbox2");
-console.log(checkbox)
 
+var reset = document.getElementById("reset1");
+
+var cy;
 
 async function getApi(idOrName){
   if(idOrName && (!(idOrName == '/api/module/'))){
@@ -46,9 +48,11 @@ function iniCy(json){
       return el;
     };
   // console.log(json);//debuggin reasons
-  var cy = cytoscape({
+  cy = cytoscape({
   container: document.getElementById('cy'), // container to render in
     elements: json,
+    styleEnabled: true,
+    // headless: true,
     style: [ // the stylesheet for the graph
       {
         selector: 'node',
@@ -59,6 +63,8 @@ function iniCy(json){
           'color': '#fff',
           'text-outline-color': '#888',
           'text-outline-width': 1,
+          "text-valign": "center",
+          "text-halign": "center",
         }
       },{
         selector: 'node[[degree <= 1]]',
@@ -97,17 +103,15 @@ function iniCy(json){
     },{
       selector: 'node:selected',
       style: {
-        'background-color': '#A3CA88',
-        'label':'data(name)',
         'font-size':10,
-        'color': '#fff',
-        'text-outline-color': '#888',
         'text-outline-width': 3,
+        "text-valign": "top",
       },
     },{
       selector: "edge.selected",
       style: {
         'background-color': '#fff',
+
       },
     },
     ],
@@ -120,7 +124,7 @@ function iniCy(json){
       avoidOverlap: true,
       idealEdgeLength: 120,
 
-    }
+    },
   });
   // Created popup elements when selecting nodes with links inside
   var makeTippy = function(node, html){
@@ -184,54 +188,43 @@ function iniCy(json){
   search.addEventListener('submit',function(e){
     e.preventDefault();
     var gName = search.elements['search_input'].value
-    if(cy.nodes(cy.nodes(`node[name= "${gName}"]`).select())){
+    if(cy.nodes(`node[name= "${gName}"]`).select().size() != 0){
       cy.nodes(`node[name= "${gName}"]`).select()
     }else{
-      console.log('Gene not found')
+      alert("Gene cannot be found in currently displayed graph")
     }
   });
   checkbox.addEventListener( 'change', function() {
     if(this.checked) {
-      cy.style()
-      .selector('edge[?directionality]')
-      .style({
-        'display': 'none',
-      })
-
-      .update() // indicate the end of your new stylesheet so that it can be updated on elements
-      ;
-      } else {
-        cy.style()
-        .selector('edge[?directionality]')
-        .style({
-          'display': 'element',
-        })
-
+      cy.style().selector('edge[?directionality]').style({'display': 'none',}).update() // indicate the end of your new stylesheet so that it can be updated on elements
+      ;} else {
+        cy.style().selector('edge[?directionality]').style({'display': 'element',})
         .update() // indicate the end of your new stylesheet so that it can be updated on elements
-        ;
-      }
+        ;}
     });
     checkbox2.addEventListener( 'change', function() {
       if(this.checked) {
-        cy.style()
-        .selector('edge[!directionality]')
-        .style({
-          'display': 'none',
-        })
-
+        cy.style().selector('edge[!directionality]').style({'display': 'none',})
         .update() // indicate the end of your new stylesheet so that it can be updated on elements
-        ;
-        } else {
-          cy.style()
-          .selector('edge[!directionality]')
-          .style({
-            'display': 'element',
-          })
-
+        ;} else {
+          cy.style().selector('edge[!directionality]').style({'display': 'element',})
           .update() // indicate the end of your new stylesheet so that it can be updated on elements
-          ;
-        }
+          ;}
       });
+    reset1.addEventListener('click', function(){
+      cy.fit();
+    })
+      form.addEventListener('submit',function(e){
+        e.preventDefault();
+        cy.destroy()
+        console.log(cy.destroyed())
+      })
+
+      gene.addEventListener('submit',function(e){
+        e.preventDefault();
+        cy.destroy()
+        console.log(cy.destroyed())
+      })
 }
 
 form.addEventListener('submit',function(e){
@@ -246,6 +239,5 @@ gene.addEventListener('submit',function(e){
   var gene_query = gene.elements['gene_input'].value
   getApi('/api/gene?name='+gene_query).then((json)=>{
     iniCy(json);
-    cy.nodes(`node[name = "${gene_query}"]`).select();
   })
 })

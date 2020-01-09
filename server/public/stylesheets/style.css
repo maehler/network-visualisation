@@ -11,6 +11,11 @@ a {
   left: 50px;
   top: 600px;
 }
+#reset{
+  position: absolute;
+  left: 50px;
+  top: 700px;
+}
 #cy {
 
   width: 100%;
