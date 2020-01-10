@@ -6,13 +6,25 @@ body {
 a {
   color: #00B7FF;
 }
+.container{
+  /* display:inline-block; */
+  width:450px;
+  background-color:rgba(0, 0, 0, 0.5);
+  position:absolute;
+}
+#white{
+  -webkit-text-fill-color: white;
+}
+#notwhite{
+  -webkit-text-fill-color: black;
+}
 #check{
-  position: absolute;
+  /* position: absolute; */
   left: 50px;
   top: 600px;
 }
 #reset{
-  position: absolute;
+  /* position: absolute; */
   left: 50px;
   top: 700px;
 }
@@ -26,17 +38,17 @@ a {
 }
 
 #module{
-  position: absolute;
+  /* position: absolute; */
   top: 150px;
   left: 50px;
 }
 #gene{
-  position: absolute;
+  /* position: absolute; */
   top: 300px;
   left: 50px;
 }
 #search{
-  position: absolute;
+  /* position: absolute; */
   top: 450px;
   left: 50px;
 }
