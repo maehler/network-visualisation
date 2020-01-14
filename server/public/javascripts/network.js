@@ -58,19 +58,22 @@ checkbox.addEventListener( 'change', function() {
       ;}
   });
 
-  checkbox2.addEventListener( 'change', function() {
-    if(this.checked) {
-      cy.style().selector('edge[!directionality]').style({'display': 'none',})
+checkbox2.addEventListener( 'change', function() {
+  if(this.checked) {
+    cy.style().selector('edge[!directionality]').style({'display': 'none',})
+    .update() // indicate the end of your new stylesheet so that it can be updated on elements
+    ;} else {
+      cy.style().selector('edge[!directionality]').style({'display': 'element',})
       .update() // indicate the end of your new stylesheet so that it can be updated on elements
-      ;} else {
-        cy.style().selector('edge[!directionality]').style({'display': 'element',})
-        .update() // indicate the end of your new stylesheet so that it can be updated on elements
-        ;}
-    });
-  
-  reset1.addEventListener('click', function(){
+      ;}
+  });
+
+reset.addEventListener('click', function(){
     cy.fit();
-  })
+})
+
+
+
 async function getApi(idOrName){
   if(idOrName && (!(idOrName == '/api/module/'))){
     const response = await fetch(idOrName);
@@ -108,8 +111,6 @@ function iniCy(json){
   cy = cytoscape({
   container: document.getElementById('cy'), // container to render in
     elements: json,
-    styleEnabled: true,
-    // headless: true,
     style: [ // the stylesheet for the graph
       {
         selector: 'node',
@@ -123,7 +124,8 @@ function iniCy(json){
           "text-valign": "center",
           "text-halign": "center",
         }
-      },{
+      },
+      {
         selector: 'node[[degree <= 1]]',
         style: {
           'height': 6,
@@ -145,32 +147,45 @@ function iniCy(json){
           // 'label': 'data(id)'
         }
       },{
-        selector: 'edge',
-        style: {
+        "selector": 'edge',
+        "style": {
           'width': 1,
-          'line-color': '#88A7CA',
-          'curve-style':'straight',
+          "curve-style": "bezier",
+          "haystack-radius": "0.5",
+          "opacity": "0.4",
+          "line-color": "#88A7CA",
+          "overlay-padding": "3px"
+
         }
-      }, {
+      },
+      {
       selector: 'edge[?directionality]',
       style : {
         'target-arrow-color': '#88A7CA',
         'target-arrow-shape': 'vee'
       }
-    },{
+    },
+    {
       selector: 'node:selected',
       style: {
         'font-size':10,
         'text-outline-width': 3,
         "text-valign": "top",
       },
-    },{
+    },
+    {
       selector: "edge.selected",
       style: {
         'background-color': '#fff',
 
       },
     },
+    {
+      selector:"node[module]",
+      style:{
+        'background-color':'#FFF'
+      }
+    }
     ],
 
     layout: {
