@@ -13,7 +13,7 @@ var checkbox2 = document.getElementById("checkbox2");
 var reset = document.getElementById("reset1");
 
 var cy;
-
+//Selects node thats in the search field
 search.addEventListener('submit',function(e){
   e.preventDefault();
   var gName = search.elements['search_input'].value
@@ -123,37 +123,18 @@ function iniCy(json){
           'text-outline-width': 1,
           "text-valign": "center",
           "text-halign": "center",
-        }
-      },
-      {
-        selector: 'node[[degree <= 1]]',
-        style: {
-          'height': 6,
-          'width': 6,
-          // 'label': 'data(id)'
-        }
-      },{
-        selector: 'node[[degree >= 2]][[degree <= 9]]',
-        style: {
-          'height': 10,
-          'width': 10,
-          // 'label': 'data(id)'
-        }
-      },{
-        selector: 'node[[degree >= 10]]',
-        style: {
-          'height': 13,
-          'width': 13,
-          // 'label': 'data(id)'
+          'height': '24',
+          'width': '24'
         }
       },{
         "selector": 'edge',
         "style": {
           'width': 1,
           'curve-style': 'unbundled-bezier',
-          'control-point-distance': '20px',
+          'control-point-distance': '35px',
           'control-point-weight': '0.5',
           'edge-distances':"node-position",
+          "control-point-step-size":"10px",
           "opacity": "0.4",
           "line-color": "#88A7CA",
           "overlay-padding": "3px"
@@ -194,12 +175,18 @@ function iniCy(json){
       name: 'cose-bilkent',
       animate : 'end',
       nodeDimensionsIncludeLabels: false,
-      // nodeRepulsion: 45000,
+      // nodeRepulsion: 45000*1.5,
       avoidOverlap: true,
-      idealEdgeLength: 120,
+      // idealEdgeLength: 140,
 
     },
   });
+  cy.nodes().forEach(function(ele){
+    // console.table(ele.degree())
+    if(ele.degree()<20){
+      cy.style().selector(`node[[degree=${ele.degree()}]]`).style({'height': ele.degree()+4,'width': ele.degree()+4,'label':'data(name)',}).update()
+    }
+  })
   // Created popup elements when selecting nodes with links inside
   var makeTippy = function(node, html){
      return tippy( node.popperRef(), {
@@ -258,5 +245,5 @@ function iniCy(json){
         cy.nodes().not(n).forEach(hideTippy);
       });
   });
-  //Selects node thats in the search field
+
 }
