@@ -150,8 +150,10 @@ function iniCy(json){
         "selector": 'edge',
         "style": {
           'width': 1,
-          "curve-style": "bezier",
-          "haystack-radius": "0.5",
+          'curve-style': 'unbundled-bezier',
+          'control-point-distance': '20px',
+          'control-point-weight': '0.5',
+          'edge-distances':"node-position",
           "opacity": "0.4",
           "line-color": "#88A7CA",
           "overlay-padding": "3px"
@@ -192,7 +194,7 @@ function iniCy(json){
       name: 'cose-bilkent',
       animate : 'end',
       nodeDimensionsIncludeLabels: false,
-      nodeRepulsion: 45000,
+      // nodeRepulsion: 45000,
       avoidOverlap: true,
       idealEdgeLength: 120,
 
