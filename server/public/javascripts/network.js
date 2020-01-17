@@ -1,6 +1,5 @@
 
-
-var form = document.getElementById('module')
+const form = document.getElementById('module')
 
 var gene = document.getElementById('gene')
 
@@ -13,6 +12,45 @@ var checkbox2 = document.getElementById("checkbox2");
 var reset = document.getElementById("reset1");
 
 var cy;
+
+// Fetch genes belonging to an annotation term
+async function term2gene(type, terms) {
+    const response = await fetch("https://franklin.upsc.se:5432/athaliana/term-to-gene", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body  : JSON.stringify({
+          target:[{
+            name: type,
+            terms: terms
+          }]
+        })
+    });
+    const json = await response.json();
+    // console.log(response.headers.raw())
+    return json;
+}
+
+// Fetch annotations for one (or several) genes
+async function gene2term(type, genes) {
+    const response = await fetch("https://franklin.upsc.se:5432/athaliana/gene-to-term", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            target: type,
+            genes: genes
+        })
+    });
+    const json = await response.json();
+    return json;
+}
+// gene2term("go", ["AT2G07714"]).then(json => console.log(json)).catch((error) => {console.error('Error:', error);});
+term2gene("go",['GO:0008150']).then(json => console.log(json))
+
+
 //Selects node thats in the search field
 search.addEventListener('submit',function(e){
   e.preventDefault();
