@@ -15,6 +15,8 @@ const go = document.getElementById("GO");
 
 const size = document.getElementById("size")
 
+const gif = document.getElementById("gif")
+
 var cy;
 
 // Fetch genes belonging to an annotation term
@@ -32,7 +34,6 @@ async function term2gene(type, terms) {
         })
     });
     const json = await response.json();
-    // console.log(response.headers.raw())
     return json;
 }
 
@@ -51,7 +52,7 @@ async function gene2term(type, genes) {
     const json = await response.json();
     return json;
 }
-gene2term("go", ["AT3G60570"]).then(json => console.log(json)).catch((error) => {console.error('Error:', error);});
+// gene2term("go", ["AT3G60570"]).then(json => console.log(json)).catch((error) => {console.error('Error:', error);});
 // term2gene("go",['GO:0008150']).then(json => console.log(json))
 
 
@@ -69,6 +70,7 @@ gene.addEventListener('submit',function(e){
 
 form.addEventListener('submit',function(e){
   e.preventDefault();
+  gif.style.display = "block";
   const formVal = form.elements['module_input'].value
   getApi('/api/module/'+formVal).then((json)=>{
     iniCy(json);})
@@ -76,16 +78,18 @@ form.addEventListener('submit',function(e){
 
 gene.addEventListener('submit',function(e){
   e.preventDefault();
+  gif.style.display = "block";
   const gene_query = gene.elements['gene_input'].value
   getApi('/api/gene?name='+gene_query).then((json)=>{
     iniCy(json);
   })
+  gif.style.display = "none";
 })
 
 //Selects node thats in the search field
 search.addEventListener('submit',function(e){
   e.preventDefault();
-  var gName = search.elements['search_input'].value
+  const gName = search.elements['search_input'].value
   if(cy.nodes(`node[name= "${gName}"]`).select().size() != 0){
     cy.nodes(`node[name= "${gName}"]`).select()
   }else{
@@ -95,7 +99,8 @@ search.addEventListener('submit',function(e){
 
 go.addEventListener('submit', function(e){
   e.preventDefault();
-  var go_var = go.elements['GO_input'].value
+  gif.style.display = "block";
+  const go_var = go.elements['GO_input'].value
   const color = go.elements['color_input'].value
   genelist = term2gene('go',[`${go_var}`]).then(json =>{
     json.go[0].ids.forEach(function(id){
@@ -103,6 +108,8 @@ go.addEventListener('submit', function(e){
       .update();
     })
   })
+  gif.style.display = "none";
+
 })
 
 checkbox.addEventListener( 'change', function() {
@@ -135,6 +142,7 @@ size.addEventListener('click', function(){
       cy.style().selector(`node[[degree=${deg}]]`).style({'height': deg+4,'width': deg+4,'label':'data(name)',}).update()
     }
   })
+  gif.style.display = "none";
 })
 
 async function getApi(idOrName){
@@ -187,8 +195,8 @@ function iniCy(json){
           'text-outline-width': 1,
           "text-valign": "center",
           "text-halign": "center",
-          'height': '24',
-          'width': '24'
+          'height': '6',
+          'width': '6'
         }
       },{
         "selector": 'edge',
@@ -204,7 +212,17 @@ function iniCy(json){
           "overlay-padding": "3px"
 
         }
-      },
+      },{
+        "selector": 'node[[degree>=3]]',
+        "style": {
+          "height":"10",
+          "width":"10",
+      }},{
+        "selector": 'node[[degree>=5]]',
+        "style": {
+          "height":"14",
+          "width":"14",
+      }},
       {
       selector: 'edge[?directionality]',
       style : {
@@ -239,7 +257,7 @@ function iniCy(json){
       name: 'cose-bilkent',
       animate : 'end',
       nodeDimensionsIncludeLabels: false,
-      // nodeRepulsion: 45000*1.5,
+      // nodeRepulsion: 45000,
       avoidOverlap: true,
       // idealEdgeLength: 140,
 
@@ -303,6 +321,7 @@ function iniCy(json){
 
         cy.nodes().not(n).forEach(hideTippy);
       });
+      gif.style.display = "none";
   });
 
 }
