@@ -1,15 +1,19 @@
 
 const form = document.getElementById('module')
 
-var gene = document.getElementById('gene')
+const gene = document.getElementById('gene')
 
-var search = document.getElementById("search")
+const search = document.getElementById("search")
 
-var checkbox = document.getElementById("checkbox");
+const checkbox = document.getElementById("checkbox");
 
-var checkbox2 = document.getElementById("checkbox2");
+const checkbox2 = document.getElementById("checkbox2");
 
-var reset = document.getElementById("reset1");
+const reset = document.getElementById("reset1");
+
+const go = document.getElementById("GO");
+
+const size = document.getElementById("size")
 
 var cy;
 
@@ -47,9 +51,36 @@ async function gene2term(type, genes) {
     const json = await response.json();
     return json;
 }
-// gene2term("go", ["AT2G07714"]).then(json => console.log(json)).catch((error) => {console.error('Error:', error);});
-term2gene("go",['GO:0008150']).then(json => console.log(json))
+gene2term("go", ["AT3G60570"]).then(json => console.log(json)).catch((error) => {console.error('Error:', error);});
+// term2gene("go",['GO:0008150']).then(json => console.log(json))
 
+
+
+
+form.addEventListener('submit',function(e){
+  e.preventDefault();
+  cy.destroy()
+})
+
+gene.addEventListener('submit',function(e){
+  e.preventDefault();
+  cy.destroy()
+})
+
+form.addEventListener('submit',function(e){
+  e.preventDefault();
+  const formVal = form.elements['module_input'].value
+  getApi('/api/module/'+formVal).then((json)=>{
+    iniCy(json);})
+})
+
+gene.addEventListener('submit',function(e){
+  e.preventDefault();
+  const gene_query = gene.elements['gene_input'].value
+  getApi('/api/gene?name='+gene_query).then((json)=>{
+    iniCy(json);
+  })
+})
 
 //Selects node thats in the search field
 search.addEventListener('submit',function(e){
@@ -62,28 +93,15 @@ search.addEventListener('submit',function(e){
   }
 });
 
-form.addEventListener('submit',function(e){
+go.addEventListener('submit', function(e){
   e.preventDefault();
-  cy.destroy()
-})
-
-gene.addEventListener('submit',function(e){
-  e.preventDefault();
-  cy.destroy()
-})
-
-form.addEventListener('submit',function(e){
-  e.preventDefault();
-  var formVal = form.elements['module_input'].value
-  getApi('/api/module/'+formVal).then((json)=>{
-    iniCy(json);})
-})
-
-gene.addEventListener('submit',function(e){
-  e.preventDefault();
-  var gene_query = gene.elements['gene_input'].value
-  getApi('/api/gene?name='+gene_query).then((json)=>{
-    iniCy(json);
+  var go_var = go.elements['GO_input'].value
+  const color = go.elements['color_input'].value
+  genelist = term2gene('go',[`${go_var}`]).then(json =>{
+    json.go[0].ids.forEach(function(id){
+      cy.style().selector(`node[name = ${id}]`).style({'background-color':`${color}`,})
+      .update();
+    })
   })
 })
 
@@ -110,7 +128,14 @@ reset.addEventListener('click', function(){
     cy.fit();
 })
 
-
+size.addEventListener('click', function(){
+  cy.nodes().forEach(function(ele){
+    const deg = ele.degree()
+    if(deg<20){
+      cy.style().selector(`node[[degree=${deg}]]`).style({'height': deg+4,'width': deg+4,'label':'data(name)',}).update()
+    }
+  })
+})
 
 async function getApi(idOrName){
   if(idOrName && (!(idOrName == '/api/module/'))){
@@ -154,6 +179,7 @@ function iniCy(json){
         selector: 'node',
         style:{
           'background-color': '#666',
+          'border-color':'black',
           'label':'data(name)',
           'font-size':4,
           'color': '#fff',
@@ -219,12 +245,7 @@ function iniCy(json){
 
     },
   });
-  cy.nodes().forEach(function(ele){
-    // console.table(ele.degree())
-    if(ele.degree()<20){
-      cy.style().selector(`node[[degree=${ele.degree()}]]`).style({'height': ele.degree()+4,'width': ele.degree()+4,'label':'data(name)',}).update()
-    }
-  })
+
   // Created popup elements when selecting nodes with links inside
   var makeTippy = function(node, html){
      return tippy( node.popperRef(), {
