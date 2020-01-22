@@ -277,9 +277,9 @@ function iniCy(json){
       name: 'cose-bilkent',
       animate : 'end',
       nodeDimensionsIncludeLabels: false,
-      nodeRepulsion: 45000,
+      // nodeRepulsion: 45000,
       avoidOverlap: true,
-      // idealEdgeLength: 140,
+      idealEdgeLength: 120, 
 
     },
   });
