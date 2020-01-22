@@ -37,6 +37,20 @@ async function term2gene(type, terms) {
     return json;
 }
 
+async function goIteration(GO){
+  const response = term2gene('go',[`${GO}`]).then(json =>{
+      goList =[]
+      json.go[0].ids.forEach(function(id){
+        goList.push(id)
+        // console.log(id)
+      })
+      return goList
+    })
+    const list = await response;
+    return(list)
+
+}
+
 // Fetch annotations for one (or several) genes
 async function gene2term(type, genes) {
     const response = await fetch("https://franklin.upsc.se:5432/athaliana/gene-to-term", {
@@ -52,7 +66,7 @@ async function gene2term(type, genes) {
     const json = await response.json();
     return json;
 }
-// gene2term("go", ["AT3G60570"]).then(json => console.log(json)).catch((error) => {console.error('Error:', error);});
+// gene2term("go", ["AT5G24735"]).then(json => console.log(json)).catch((error) => {console.error('Error:', error);});
 // term2gene("go",['GO:0008150']).then(json => console.log(json))
 
 
@@ -102,14 +116,17 @@ go.addEventListener('submit', function(e){
   gif.style.display = "block";
   const go_var = go.elements['GO_input'].value
   const color = go.elements['color_input'].value
-  genelist = term2gene('go',[`${go_var}`]).then(json =>{
-    json.go[0].ids.forEach(function(id){
-      cy.style().selector(`node[name = ${id}]`).style({'background-color':`${color}`,})
-      .update();
-    })
-  })
-  gif.style.display = "none";
-
+  goIteration(go_var).then(go_list =>
+    cy.nodes().forEach(function(ele){
+      if(go_list.includes(ele.data("name"))){
+        // console.log(ele.style())
+        // cy.style().selector(`node[name=${ele.data("name")}]`).style({'background-color':`${color}`,})
+        ele.style("background-color", color)
+        // console.log(ele.json())
+        // ele.json(`{style:{background-color:${color}}}`)
+      }
+      gif.style.display = "none";
+    }))
 })
 
 checkbox.addEventListener( 'change', function() {
@@ -117,7 +134,7 @@ checkbox.addEventListener( 'change', function() {
     cy.style().selector('edge[?directionality]').style({'display': 'none',}).update() // indicate the end of your new stylesheet so that it can be updated on elements
     ;} else {
       cy.style().selector('edge[?directionality]').style({'display': 'element',})
-      .update() // indicate the end of your new stylesheet so that it can be updated on elements
+      .update() // indicate the end of your new stylesheet so that it can be updated on elements`node[name=${ele.data("name")}]`
       ;}
   });
 
@@ -323,5 +340,4 @@ function iniCy(json){
       });
       gif.style.display = "none";
   });
-
 }
