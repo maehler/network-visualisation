@@ -156,7 +156,8 @@ size.addEventListener('click', function(){
   cy.nodes().forEach(function(ele){
     const deg = ele.degree()
     if(deg<20){
-      cy.style().selector(`node[[degree=${deg}]]`).style({'height': deg+4,'width': deg+4,'label':'data(name)',}).update()
+      ele.style('height', deg+4)
+      ele.style('width', deg+4)
     }
   })
   gif.style.display = "none";
@@ -213,7 +214,9 @@ function iniCy(json){
           "text-valign": "center",
           "text-halign": "center",
           'height': '6',
-          'width': '6'
+          'width': '6',
+          'border-width':'1',
+          'border-color':'black'
         }
       },{
         "selector": 'edge',
@@ -274,7 +277,7 @@ function iniCy(json){
       name: 'cose-bilkent',
       animate : 'end',
       nodeDimensionsIncludeLabels: false,
-      // nodeRepulsion: 45000,
+      nodeRepulsion: 45000,
       avoidOverlap: true,
       // idealEdgeLength: 140,
 
