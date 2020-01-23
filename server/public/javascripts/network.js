@@ -38,16 +38,28 @@ async function term2gene(type, terms) {
 }
 
 async function goIteration(GO){
-  const response = term2gene('go',[`${GO}`]).then(json =>{
-      goList =[]
-      json.go[0].ids.forEach(function(id){
-        goList.push(id)
-        // console.log(id)
+  if("GO"===GO.substring(0,2)){
+    const response = term2gene('go',[`${GO}`]).then(json =>{
+        goList =[]
+        json.go[0].ids.forEach(function(id){
+          goList.push(id)
+          // console.log(id)
+        })
+        return goList
       })
-      return goList
-    })
     const list = await response;
     return(list)
+  }else{
+    const response = term2gene('pfam',[`${GO}`]).then(json =>{
+        goList =[]
+        json.pfam[0].ids.forEach(function(id){
+          goList.push(id)
+        })
+        return goList
+      })
+    const list = await response;
+    return(list)
+  }
 
 }
 
@@ -66,19 +78,21 @@ async function gene2term(type, genes) {
     const json = await response.json();
     return json;
 }
-// gene2term("go", ["AT5G24735"]).then(json => console.log(json)).catch((error) => {console.error('Error:', error);});
-// term2gene("go",['GO:0008150']).then(json => console.log(json))
+// gene2term("pfam", ["AT2G07714"]).then(json => console.log(json)).catch((error) => {console.error('Error:', error);});
+// term2gene("pfam",['PF03552']).then(json => console.log(json))
 
 
 
 
 form.addEventListener('submit',function(e){
   e.preventDefault();
+  hideAllTippies();
   cy.destroy()
 })
 
 gene.addEventListener('submit',function(e){
   e.preventDefault();
+  hideAllTippies();
   cy.destroy()
 })
 
@@ -97,7 +111,6 @@ gene.addEventListener('submit',function(e){
   getApi('/api/gene?name='+gene_query).then((json)=>{
     iniCy(json);
   })
-  gif.style.display = "none";
 })
 
 //Selects node thats in the search field
@@ -121,7 +134,7 @@ go.addEventListener('submit', function(e){
       if(go_list.includes(ele.data("name"))){
         // console.log(ele.style())
         // cy.style().selector(`node[name=${ele.data("name")}]`).style({'background-color':`${color}`,})
-        ele.style("background-color", color)
+        ele.style('background-color', color)
         // console.log(ele.json())
         // ele.json(`{style:{background-color:${color}}}`)
       }
@@ -153,6 +166,7 @@ reset.addEventListener('click', function(){
 })
 
 size.addEventListener('click', function(){
+  gif.style.display = "block";
   cy.nodes().forEach(function(ele){
     const deg = ele.degree()
     if(deg<20){
@@ -216,7 +230,8 @@ function iniCy(json){
           'height': '6',
           'width': '6',
           'border-width':'1',
-          'border-color':'black'
+          'border-color':'black',
+          'pie-size': '90%',
         }
       },{
         "selector": 'edge',
@@ -279,7 +294,7 @@ function iniCy(json){
       nodeDimensionsIncludeLabels: false,
       // nodeRepulsion: 45000,
       avoidOverlap: true,
-      idealEdgeLength: 120, 
+      idealEdgeLength: 120,
 
     },
   });
