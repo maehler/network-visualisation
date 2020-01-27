@@ -192,10 +192,7 @@ save.addEventListener('click', function(){
   optionsObj =  {
       node: {
         css: false,
-        data: false,
-        'width': 'data(width)',
-        'height': 'data(height)',
-        'id':'data(name)',
+        data: true,
         position: true,
         discludeds: ["tippy"]
       },
