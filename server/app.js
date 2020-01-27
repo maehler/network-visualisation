@@ -6,6 +6,7 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var apiRouter = require('./routes/api');
 var usersRouter = require('./routes/users');
+const documentationRouter = require('./routes/documenation')
 var jsRouter = require('./routes/js');
 var sqlite3 = require("sqlite3").verbose();
 var cytoscape = require("cytoscape");
@@ -24,7 +25,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.engine('html', require('ejs').renderFile);
+app.set('views', path.join(__dirname, 'public'));
+app.set('view engine', 'html');
 
+app.use('/documentation', documentationRouter);
 app.use('/api', apiRouter);
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

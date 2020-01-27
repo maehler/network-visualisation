@@ -1,8 +1,13 @@
 body {
   padding: 0px;
+  line-height:15px;
   /* font: 14px "Lucida Grande", Helvetica, Arial, sans-serif; */
 }
 
+#alert{
+  -webkit-text-fill-color: white; /* Will override color (regardless of order) */
+  font-size: 15px;
+}
 .loader{
   position:relative;
   height: 100%;

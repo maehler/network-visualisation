@@ -21,6 +21,8 @@ const save = document.getElementById('save')
 
 const colorReset = document.getElementById('colorReset')
 
+const documentation = document.getElementById('documentation')
+
 var cy;
 
 var filename;
@@ -202,22 +204,30 @@ save.addEventListener('click', function(){
         discludeds: ["tippy"]
       },
       layoutBy: "cose" // string of layout name or layout function
-}
-  cy.graphml(optionsObj)
-  text = cy.graphml()
-  var element = document.createElement('a');
-  element.setAttribute('href', 'data:text/xml;charset=utf-8,' + encodeURIComponent(text));
-  element.setAttribute('download', `${filename}.network.graphml`);
+  }
+    cy.graphml(optionsObj)
+    text = cy.graphml()
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:text/xml;charset=utf-8,' + encodeURIComponent(text));
+    element.setAttribute('download', `${filename}.network.graphml`);
 
-  element.style.display = 'none';
-  document.body.appendChild(element);
+    element.style.display = 'none';
+    document.body.appendChild(element);
 
-  element.click();
+    element.click();
 
-  document.body.removeChild(element);
+    document.body.removeChild(element);
 
 })
 
+documentation.addEventListener('click', function(){
+  var element = document.createElement('a');
+  element.setAttribute('href', 'http://localhost:3000/documentation');
+  element.style.display = 'none';
+  document.body.appendChild(element);
+  element.click();
+  document.body.removeChild(element);
+})
 async function getApi(idOrName){
   if(idOrName && (!(idOrName == '/api/module/'))){
     const response = await fetch(idOrName);
