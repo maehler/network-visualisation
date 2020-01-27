@@ -12,18 +12,20 @@
 
 <body>
   <div id="cy"> </div>
-  <div class="container">
+  <div class="container" id="displaybox">
   <h1 id="white">SeedTransNet</h1>
   <p id="white">Welcome to SeedTransNet network visualization</p>
 
 
     <form id="module">
-      <label id="white">Select module of interest</label>
       <br></br>
-      <input class ='typeahead'type="text" value = '' name='module_input'>
+      <label id="white">Select network module of interest</label>
+      <br></br>
+      <input class ='typeahead'type="text" value = '' placeholder='Leave empty for whole network'name='module_input'>
       <br><br>
       <button type="submit">Visualize module</button>
     </form>
+    <br></br>
     <form id="gene">
       <label id="white">Select specific gene of interest</label>
       <br></br>
@@ -31,13 +33,15 @@
       <br><br>
       <button type="submit">Visualize gene</button>
     </form>
+    <br></br>
     <form id="search">
       <label id="white">Search for gene in current network</label>
-      <br></br>
+      <br id="alertmess"></br>
       <input type="text" class= 'typeahead' value=""  name="search_input"></label>
       <br><br>
-      <button type="submit">Display gene of interest</button>
+      <button type="submit">Select gene of interest</button>
     </form>
+    <br></br>
     <form id="GO">
       <label id="white">Color genes based on GO/Pfam annotation</label>
       <br></br>
@@ -46,17 +50,17 @@
       <input type="text" class= 'typeahead' value=""  name="color_input" placeholder="Color of choice"></label>
       <br><br>
       <button type="submit">Color genes of interest</button>
+      <button id="colorReset" type="submit">Reset colors of the nodes</button>
     </form>
     <form id="check" >
       <label id="white"><input type="checkbox" id= "checkbox" name= "checkbox">   Hide directed edges</label>
       <br></br>
       <label id="white"><input type="checkbox" id= "checkbox2" name= "checkbox">   Hide undirected edges</label>
     </form>
-    <form id="reset">
-      <button type="button" id="reset1">Reset zoom</button>
-    </form>
-    <form id="size">
-      <button type="button" id="size1">Set sizes</button>
+    <form id="buttons">
+      <button type="button" id="sizeReset">Reset zoom</button>
+      <button type="button" id="save">Save graph to .graphml</button>
+      <button type="button" id="documentation">Documentation</button>
     </form>
   </div>
   <div class=loader>
@@ -73,6 +77,7 @@
   <script src ='js/typeahead.jquery.min.js'></script>
   <script src ='js/bloodhound.min.js'></script>
   <script src="javascripts/search_matches.js"></script>
+  <script src="js/cytoscape-graphml.js"></script>
   <script src="https://unpkg.com/cytoscape-popper@1.0.2/cytoscape-popper.js"></script>
   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>

@@ -9,7 +9,7 @@ const checkbox = document.getElementById("checkbox");
 
 const checkbox2 = document.getElementById("checkbox2");
 
-const reset = document.getElementById("reset1");
+const sizeReset = document.getElementById("sizeReset");
 
 const go = document.getElementById("GO");
 
@@ -17,8 +17,24 @@ const size = document.getElementById("size")
 
 const gif = document.getElementById("gif")
 
+const save = document.getElementById('save')
+
+const colorReset = document.getElementById('colorReset')
+
 var cy;
 
+var filename;
+
+var hideTippy = function(node){
+   var tippy = node.data('tippy');
+
+   if(tippy != null){
+     tippy.hide();
+   }
+ };
+ var hideAllTippies = function(){
+    cy.nodes().forEach(hideTippy);
+  };
 // Fetch genes belonging to an annotation term
 async function term2gene(type, terms) {
     const response = await fetch("https://franklin.upsc.se:5432/athaliana/term-to-gene", {
@@ -99,7 +115,8 @@ gene.addEventListener('submit',function(e){
 form.addEventListener('submit',function(e){
   e.preventDefault();
   gif.style.display = "block";
-  const formVal = form.elements['module_input'].value
+  const formVal = form.elements['module_input'].value;
+  filename = "module_"+formVal;
   getApi('/api/module/'+formVal).then((json)=>{
     iniCy(json);})
 })
@@ -108,6 +125,7 @@ gene.addEventListener('submit',function(e){
   e.preventDefault();
   gif.style.display = "block";
   const gene_query = gene.elements['gene_input'].value
+  filename = "Gene_"+gene_query;
   getApi('/api/gene?name='+gene_query).then((json)=>{
     iniCy(json);
   })
@@ -118,9 +136,11 @@ search.addEventListener('submit',function(e){
   e.preventDefault();
   const gName = search.elements['search_input'].value
   if(cy.nodes(`node[name= "${gName}"]`).select().size() != 0){
+    $('#alert').remove();
     cy.nodes(`node[name= "${gName}"]`).select()
   }else{
-    alert("Gene cannot be found in currently displayed graph")
+    $('#alertmess').remove();
+    $('#search').append(`<div id="alert">${gName} can't be found in displayed network</div>`);
   }
 });
 
@@ -132,14 +152,17 @@ go.addEventListener('submit', function(e){
   goIteration(go_var).then(go_list =>
     cy.nodes().forEach(function(ele){
       if(go_list.includes(ele.data("name"))){
-        // console.log(ele.style())
-        // cy.style().selector(`node[name=${ele.data("name")}]`).style({'background-color':`${color}`,})
         ele.style('background-color', color)
-        // console.log(ele.json())
-        // ele.json(`{style:{background-color:${color}}}`)
       }
       gif.style.display = "none";
     }))
+})
+
+colorReset.addEventListener('click', function(e){
+  e.preventDefault();
+  cy.nodes().forEach(function(ele){
+    ele.style('background-color', '#666')
+  })
 })
 
 checkbox.addEventListener( 'change', function() {
@@ -161,20 +184,41 @@ checkbox2.addEventListener( 'change', function() {
       ;}
   });
 
-reset.addEventListener('click', function(){
+sizeReset.addEventListener('click', function(){
     cy.fit();
 })
 
-size.addEventListener('click', function(){
-  gif.style.display = "block";
-  cy.nodes().forEach(function(ele){
-    const deg = ele.degree()
-    if(deg<20){
-      ele.style('height', deg+4)
-      ele.style('width', deg+4)
-    }
-  })
-  gif.style.display = "none";
+save.addEventListener('click', function(){
+  optionsObj =  {
+      node: {
+        css: false,
+        data: false,
+        'width': 'data(width)',
+        'height': 'data(height)',
+        'id':'data(name)',
+        position: true,
+        discludeds: ["tippy"]
+      },
+      edge: {
+        css: false,
+        data: true,
+        discludeds: ["tippy"]
+      },
+      layoutBy: "cose" // string of layout name or layout function
+}
+  cy.graphml(optionsObj)
+  text = cy.graphml()
+  var element = document.createElement('a');
+  element.setAttribute('href', 'data:text/xml;charset=utf-8,' + encodeURIComponent(text));
+  element.setAttribute('download', `${filename}.network.graphml`);
+
+  element.style.display = 'none';
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
+
 })
 
 async function getApi(idOrName){
@@ -225,7 +269,7 @@ function iniCy(json){
           'color': '#fff',
           'text-outline-color': '#888',
           'text-outline-width': 1,
-          "text-valign": "center",
+          "text-valign": "top",
           "text-halign": "center",
           'height': '6',
           'width': '6',
@@ -274,9 +318,9 @@ function iniCy(json){
       },
     },
     {
-      selector: "edge.selected",
+      selector: "edge:selected",
       style: {
-        'background-color': '#fff',
+        'line-color': 'red',
 
       },
     },
@@ -285,20 +329,32 @@ function iniCy(json){
       style:{
         'background-color':'#FFF'
       }
-    }
-    ],
-
-    layout: {
-      name: 'cose-bilkent',
-      animate : 'end',
-      nodeDimensionsIncludeLabels: false,
-      // nodeRepulsion: 45000,
-      avoidOverlap: true,
-      idealEdgeLength: 120,
-
     },
+    ],
+    // layout:{
+    //   name: 'cose-bilkent',
+    //   idealEdgeLength: 120,
+    // }
   });
+  var layout = cy.layout({
+    name: 'cose-bilkent',
+    animate : 'end',
+    nodeDimensionsIncludeLabels: false,
+    // nodeRepulsion: 45000,
+    avoidOverlap: true,
+    idealEdgeLength: 120,
 
+  })
+  layout.pon('layoutstop').then(function(e){
+    cy.nodes().forEach(function(ele){
+      const deg = ele.degree()
+      if(deg<20){
+        ele.style('height', deg+4)
+        ele.style('width', deg+4)
+      }
+    })
+  })
+  layout.run()
   // Created popup elements when selecting nodes with links inside
   var makeTippy = function(node, html){
      return tippy( node.popperRef(), {
@@ -310,16 +366,8 @@ function iniCy(json){
        interactive: true
      } ).tooltips[0];
    };
-   var hideTippy = function(node){
-      var tippy = node.data('tippy');
 
-      if(tippy != null){
-        tippy.hide();
-      }
-    };
-   var hideAllTippies = function(){
-      cy.nodes().forEach(hideTippy);
-    };
+
 
     cy.on('tap', function(e){
       if(e.target === cy){
@@ -343,6 +391,9 @@ function iniCy(json){
         },{
           name: "Uniprot search",
           url : 'https://www.uniprot.org/uniprot/?query='+g+'&sort=score'
+        },{
+          name: "Geneontology search",
+          url : 'http://amigo.geneontology.org/amigo/search/bioentity?q='+g
         },
         ].map(function( link ){
         return h('a', { target: '_blank', href: link.url, 'class': 'tip-link' }, [ t(link.name) ]);
@@ -356,6 +407,7 @@ function iniCy(json){
 
         cy.nodes().not(n).forEach(hideTippy);
       });
+
       gif.style.display = "none";
   });
 }

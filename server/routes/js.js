@@ -25,4 +25,7 @@ router.get('/typeahead.jquery.min.js', function(req,res, next){
   res.sendFile('node_modules/typeahead.js/dist/typeahead.jquery.min.js', {root:'.'})
 })
 
+router.get('/cytoscape-graphml.js', function(req,res, next){
+  res.sendFile('node_modules/cytoscape-graphml/cytoscape-graphml.js', {root:'.'})
+})
 module.exports = router;
