@@ -97,7 +97,7 @@ async function gene2term(type, genes) {
     return json;
 }
 // gene2term("pfam", ["AT2G07714"]).then(json => console.log(json)).catch((error) => {console.error('Error:', error);});
-// term2gene("pfam",['PF03552']).then(json => console.log(json))
+// term2gene("go",['GO:0004499']).then(json => console.log(json))
 
 
 
@@ -120,7 +120,17 @@ form.addEventListener('submit',function(e){
   const formVal = form.elements['module_input'].value;
   filename = "module_"+formVal;
   getApi('/api/module/'+formVal).then((json)=>{
-    iniCy(json);})
+    if(typeof json[0] != 'undefined'){
+      $('#alert').remove();
+      iniCy(json);
+  }else{
+    gif.style.display = "none";
+    $('#alert').remove();
+    $('#module').append(`<div id="alert">Incorrect modul id</div>`);
+  }
+  }).catch((error)=> {
+    console.error(error)
+  });
 })
 
 gene.addEventListener('submit',function(e){
@@ -129,8 +139,13 @@ gene.addEventListener('submit',function(e){
   const gene_query = gene.elements['gene_input'].value
   filename = "Gene_"+gene_query;
   getApi('/api/gene?name='+gene_query).then((json)=>{
+    $('#alert').remove();
     iniCy(json);
-  })
+  }).catch((error)=> {
+    $('#alert').remove();
+    $('#gene').append(`<div id="alert">Incorrect gene name</div>`);
+    gif.style.display = "none";
+  });
 })
 
 //Selects node thats in the search field
@@ -141,8 +156,8 @@ search.addEventListener('submit',function(e){
     $('#alert').remove();
     cy.nodes(`node[name= "${gName}"]`).select()
   }else{
-    $('#alertmess').remove();
-    $('#search').append(`<div id="alert">${gName} can't be found in displayed network</div>`);
+    $('#alert').remove();
+    $('#alertmess').append(`<div id="alert">${gName} can't be found in displayed network</div>`);
   }
 });
 
@@ -350,6 +365,7 @@ function iniCy(json){
     // nodeRepulsion: 45000,
     avoidOverlap: true,
     idealEdgeLength: 120,
+    numIter: 5000,
 
   })
   layout.pon('layoutstop').then(function(e){
