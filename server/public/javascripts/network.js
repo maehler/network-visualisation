@@ -96,8 +96,6 @@ async function gene2term(type, genes) {
     const json = await response.json();
     return json;
 }
-// gene2term("pfam", ["AT2G07714"]).then(json => console.log(json)).catch((error) => {console.error('Error:', error);});
-// term2gene("go",['GO:0004499']).then(json => console.log(json))
 
 
 
@@ -157,7 +155,7 @@ search.addEventListener('submit',function(e){
     cy.nodes(`node[name= "${gName}"]`).select()
   }else{
     $('#alert').remove();
-    $('#alertmess').append(`<div id="alert">${gName} can't be found in displayed network</div>`);
+    $('#search').append(`<div id="alert">${gName} can't be found in displayed network</div>`);
   }
 });
 
@@ -293,11 +291,8 @@ function iniCy(json){
           'text-outline-width': 1,
           "text-valign": "top",
           "text-halign": "center",
-          'height': '6',
-          'width': '6',
           'border-width':'1',
           'border-color':'black',
-          'pie-size': '90%',
         }
       },{
         "selector": 'edge',
