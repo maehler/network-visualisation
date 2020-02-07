@@ -57,7 +57,8 @@ async function term2gene(type, terms) {
 
 async function goIteration(GO){
   if("GO"===GO.substring(0,2)){
-    const response = term2gene('go',[`${GO}`]).then(json =>{
+    const newGO  = (GO.split(' '))
+    const response = term2gene('go',newGO).then(json =>{
         goList =[]
         json.go[0].ids.forEach(function(id){
           goList.push(id)
