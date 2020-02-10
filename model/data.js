@@ -1,5 +1,5 @@
 
-const db = require("better-sqlite3")("../sqlserver/ignv.db");
+const db = require("better-sqlite3")("database/ignv.db");
 var util = require("util");
 
 
