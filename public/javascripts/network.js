@@ -23,6 +23,12 @@ const colorReset = document.getElementById('colorReset')
 
 const documentation = document.getElementById('documentation')
 
+const enrich = document.getElementById('enrich')
+
+const modal = document.getElementById("myModal");
+
+const span = document.getElementsByClassName("close")[0];
+
 var cy;
 
 var filename;
@@ -98,7 +104,20 @@ async function gene2term(type, genes) {
     return json;
 }
 
-
+async function enrichment(type, genes) {
+    const response = await fetch("https://franklin.upsc.se:5432/athaliana/enrichment", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            target: type,
+            genes: genes
+        })
+    });
+    const json = await response.json();
+    return json;
+}
 
 
 form.addEventListener('submit',function(e){
@@ -242,6 +261,35 @@ documentation.addEventListener('click', function(){
   element.click();
   document.body.removeChild(element);
 })
+
+enrich.addEventListener('click', function(){
+  gif.style.display = "block";
+  let nodeNames = []
+  cy.nodes().forEach(function(ele){
+    nodeNames.push(ele.data("name"))
+  })
+  enrichment(['go'],nodeNames).then(json=>{
+    $('#mod').remove()
+    $('.modal-content').append(`<p id="mod"></p>`);
+    json.go.forEach(term=>{
+      $('#mod').append(`<p>go:${JSON.stringify(term.id)}<p>term:${JSON.stringify(term.def)}<p>The number of genes in the test set annotated to this term: ${JSON.stringify(term.nt)}<p> The number of genes in the entire population annotated to this term: ${JSON.stringify(term.mt)}</p> <br></br>`)
+    })
+    gif.style.display = "none";
+    modal.style.display = "block";
+  }
+  )
+})
+
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
 async function getApi(idOrName){
   if(idOrName && (!(idOrName == '/api/module/'))){
     const response = await fetch(idOrName);
