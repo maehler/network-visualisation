@@ -18,9 +18,9 @@ body {
   height: 400px;
   width: 400px;
   position: relative;
-  left: 50%;
+  left: 40%;
   margin-left: -50px;
-  top: 50%;
+  top: 40%;
   margin-top: -50px;
   display:none;
 }
