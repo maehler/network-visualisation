@@ -1,8 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var controller = require('../Controler/networkdata.js')
-var bodyParser = require("body-parser");
-var cors = require("corser");
 
 // console.log(controller.getNetwork, controller.getModule, controller.getOnlyModules)
 

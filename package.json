@@ -8,21 +8,14 @@
   },
   "dependencies": {
     "better-sqlite3": "^5.4.3",
-    "body-parser": "^1.19.0",
-    "cookie-parser": "~1.4.4",
-    "corser": "^2.0.1",
     "cytoscape": "^3.12.1",
     "cytoscape-cose-bilkent": "^4.1.0",
     "cytoscape-graphml": "^1.0.6",
-    "debug": "~2.6.9",
-    "ejs": "^3.0.1",
     "express": "~4.16.1",
     "jquery": "^3.4.1",
     "morgan": "~1.9.1",
-    "node-fetch": "^2.6.0",
     "nodemon": "^2.0.2",
     "path": "^0.12.7",
-    "sqlite3": "^4.1.0",
     "tippy.js": "^5.1.2",
     "typeahead.js": "^0.11.1"
   }
