@@ -1,5 +1,4 @@
 var model = require('../model/data')
-var bodyParser = require("body-parser");
 
 
 
