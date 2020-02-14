@@ -15,8 +15,8 @@ body {
   z-index: 0;
 }
 #gif{
-  height: 100px;
-  width: 100px;
+  height: 400px;
+  width: 400px;
   position: relative;
   left: 50%;
   margin-left: -50px;
