@@ -31,6 +31,8 @@ const span = document.getElementsByClassName("close")[0];
 
 var cy;
 
+let goFlag = 0;
+
 var filename;
 
 var hideTippy = function(node){
@@ -133,6 +135,7 @@ gene.addEventListener('submit',function(e){
 })
 
 form.addEventListener('submit',function(e){
+  goFlag = 0;
   e.preventDefault();
   gif.style.display = "block";
   const formVal = form.elements['module_input'].value;
@@ -152,6 +155,7 @@ form.addEventListener('submit',function(e){
 })
 
 gene.addEventListener('submit',function(e){
+  goFlag = 0;
   e.preventDefault();
   gif.style.display = "block";
   const gene_query = gene.elements['gene_input'].value
@@ -263,30 +267,36 @@ documentation.addEventListener('click', function(){
 })
 
 enrich.addEventListener('click', function(){
-  gif.style.display = "block";
-  let nodeNames = []
-  cy.nodes().forEach(function(ele){
-    nodeNames.push(ele.data("name"))
-  })
-  enrichment(['go'],nodeNames).then(json=>{
-    $('#goTable').remove()
-    $('#goTable_wrapper').remove()
-    $('.modal-content').append(`<table id="goTable" class="display"><thead><tr><th>id</th><th>mpat</th><th>mt</th><th>name</th><th>namespace</th><th>npat</th><th>nt</th><th>padj</th><th>pval</th></tr></thead><tbody id="mod"</tbody></table>`);
-    var tbody = document.getElementById('mod');
-
-    var body = ""
-    json.go.forEach(term=>{
-      body += `<tr><td>${JSON.stringify(term.id)}</td><td>${JSON.stringify(term.mpat)}</td><td>${JSON.stringify(term.mt)}</td><td>${JSON.stringify(term.name)}</td><td>${JSON.stringify(term.namespace)}</td><td>${JSON.stringify(term.npat)}</td><td>${JSON.stringify(term.nt)}</td><td>${JSON.stringify(term.padj)}</td><td>${JSON.stringify(term.pval)}</td></td>`
+  if(goFlag ===0){
+    goFlag = 1;
+    gif.style.display = "block";
+    let nodeNames = []
+    cy.nodes().forEach(function(ele){
+      nodeNames.push(ele.data("name"))
     })
-    tbody.innerHTML += body;
+    enrichment(['go'],nodeNames).then(json=>{
+      $('#goTable').remove()
+      $('#goTable_wrapper').remove()
+      $('.modal-content').append(`<table id="goTable" class="table table-striped table-bordered"><thead><tr><th>id</th><th>mpat</th><th>mt</th><th>name</th><th>namespace</th><th>npat</th><th>nt</th><th>padj</th><th>pval</th></tr></thead><tbody id="mod"</tbody><tfoot><tr><th>id</th><th>mpat</th><th>mt</th><th>name</th><th>namespace</th><th>npat</th><th>nt</th><th>padj</th><th>pval</th></tr></tfoot></table>`);
+      var tbody = document.getElementById('mod');
 
-    $(document).ready( function () {
-      $('#goTable').DataTable();
-    });
-    gif.style.display = "none";
+      var body = ""
+      json.go.forEach(term=>{
+        body += `<tr><td>${JSON.stringify(term.id)}</td><td>${JSON.stringify(term.mpat)}</td><td>${JSON.stringify(term.mt)}</td><td>${JSON.stringify(term.name)}</td><td>${JSON.stringify(term.namespace)}</td><td>${JSON.stringify(term.npat)}</td><td>${JSON.stringify(term.nt)}</td><td>${JSON.stringify(term.padj)}</td><td>${JSON.stringify(term.pval)}</td></td>`
+      })
+      tbody.innerHTML += body;
+
+      $(document).ready( function () {
+        $('#goTable').DataTable();
+      });
+      gif.style.display = "none";
+      modal.style.display = "block";
+    }
+    )
+  }else{
     modal.style.display = "block";
   }
-  )
+
 })
 
 span.onclick = function() {
