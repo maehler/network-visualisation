@@ -255,7 +255,7 @@ save.addEventListener('click', function(){
 
 documentation.addEventListener('click', function(){
   var element = document.createElement('a');
-  element.setAttribute('href', 'http://localhost:3000/documentation');
+  element.setAttribute('href', 'https://github.com/Fattigman/projectHt2019Jacob/');
   element.style.display = 'none';
   document.body.appendChild(element);
   element.click();
@@ -269,11 +269,20 @@ enrich.addEventListener('click', function(){
     nodeNames.push(ele.data("name"))
   })
   enrichment(['go'],nodeNames).then(json=>{
-    $('#mod').remove()
-    $('.modal-content').append(`<p id="mod"></p>`);
+    $('#goTable').remove()
+    $('#goTable_wrapper').remove()
+    $('.modal-content').append(`<table id="goTable" class="display"><thead><tr><th>id</th><th>mpat</th><th>mt</th><th>name</th><th>namespace</th><th>npat</th><th>nt</th><th>padj</th><th>pval</th></tr></thead><tbody id="mod"</tbody></table>`);
+    var tbody = document.getElementById('mod');
+
+    var body = ""
     json.go.forEach(term=>{
-      $('#mod').append(`<p>go:${JSON.stringify(term.id)}<p>term:${JSON.stringify(term.def)}<p>The number of genes in the test set annotated to this term: ${JSON.stringify(term.nt)}<p> The number of genes in the entire population annotated to this term: ${JSON.stringify(term.mt)}</p> <br></br>`)
+      body += `<tr><td>${JSON.stringify(term.id)}</td><td>${JSON.stringify(term.mpat)}</td><td>${JSON.stringify(term.mt)}</td><td>${JSON.stringify(term.name)}</td><td>${JSON.stringify(term.namespace)}</td><td>${JSON.stringify(term.npat)}</td><td>${JSON.stringify(term.nt)}</td><td>${JSON.stringify(term.padj)}</td><td>${JSON.stringify(term.pval)}</td></td>`
     })
+    tbody.innerHTML += body;
+
+    $(document).ready( function () {
+      $('#goTable').DataTable();
+    });
     gif.style.display = "none";
     modal.style.display = "block";
   }
