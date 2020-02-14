@@ -2,7 +2,7 @@ FROM node:alpine
 
 RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
 
-RUN apk add --no-cache alpine-sdk python
+RUN apk add --no-cache make g++ python
 
 WORKDIR /home/node/app
 
