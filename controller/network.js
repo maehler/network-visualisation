@@ -1,4 +1,4 @@
-var model = require('../model/data')
+var model = require('../model/network')
 
 
 

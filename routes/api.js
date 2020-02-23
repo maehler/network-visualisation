@@ -1,16 +1,16 @@
 var express = require('express');
 var router = express.Router();
-var controller = require('../Controler/networkdata.js')
+var networkController = require('../controller/network.js')
 
 // console.log(controller.getNetwork, controller.getModule, controller.getOnlyModules)
 
-router.get('/', controller.getNetwork);
+router.get('/', networkController.getNetwork);
 
-router.get('/module/:module_id', controller.getModule)
+router.get('/module/:module_id', networkController.getModule)
 
-router.get('/gene', controller.getSingleGene)
+router.get('/gene', networkController.getSingleGene)
 
-router.get('/modules', controller.getOnlyModules)
+router.get('/modules', networkController.getOnlyModules)
 
-router.get('/genes', controller.getOnlyGenes)
+router.get('/genes', networkController.getOnlyGenes)
 module.exports = router;
