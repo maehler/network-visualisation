@@ -1,4 +1,4 @@
-
+<!doctype html>
 <html lang="en">
 
 <head>
@@ -15,49 +15,48 @@
 <body>
   <div id="cy"> </div>
   <div class="container" id="displaybox">
-  <h1 id="white">SeedTransNet</h1>
-  <p id="white">Welcome to SeedTransNet network visualization</p>
+  <h1>SeedTransNet</h1>
+  <p>Welcome to SeedTransNet network visualization</p>
 
 
-    <form id="module">
       <br></br>
-      <label id="white">Select network module of interest</label>
-      <br></br>
-      <input class ='typeahead'type="text" value = '' placeholder='Leave empty for whole network'name='module_input'>
+    <form id="module-form">
+      <label>Select network module of interest</label>
+      <input class="typeahead" type="text" value="" placeholder="Leave empty for whole network" name="module_input">
       <br><br>
       <button type="submit">Visualize module</button>
     </form>
     <br></br>
-    <form id="gene">
-      <label id="white">Select specific gene of interest</label>
       <br></br>
-      <input type="text" class= 'typeahead' value="" name="gene_input">
+    <form id="gene-form">
+      <label>Select specific gene of interest</label>
+      <input type="text" class="typeahead" value="" name="gene_input">
       <br><br>
       <button type="submit">Visualize gene</button>
     </form>
     <br></br>
-    <form id="search">
-      <label id="white">Search for gene in current network</label>
       <br id="alertmess"></br>
-      <input type="text" class= 'typeahead' value=""  name="search_input"></label>
+    <form id="search-form">
+      <label>Search for gene in current network</label>
+      <input type="text" class="typeahead" value="" name="search_input"></label>
       <br><br>
       <button type="submit">Select gene of interest</button>
     </form>
     <br></br>
-    <form id="GO">
-      <label id="white">Color genes based on GO/Pfam annotation</label>
       <br></br>
-      <input type="text" class= 'typeahead' value=""  name="GO_input" placeholder="GO/Pfam annotation of choice"></label>
+    <form id="GO-form">
+      <label>Color genes based on GO/Pfam annotation</label>
+      <input type="text" class="typeahead" value="" name="GO_input" placeholder="GO/Pfam annotation of choice"></label>
       <br><br>
-      <input type="text" class= 'typeahead' value=""  name="color_input" placeholder="Color of choice"></label>
+      <input type="text" class="typeahead" value=""  name="color_input" placeholder="Color of choice"></label>
       <br><br>
       <button type="submit">Color genes of interest</button>
       <button id="colorReset" type="submit">Reset colors of the nodes</button>
     </form>
-    <form id="check" >
-      <label id="white"><input type="checkbox" id= "checkbox" name= "checkbox">   Hide directed edges</label>
       <br></br>
-      <label id="white"><input type="checkbox" id= "checkbox2" name= "checkbox">   Hide undirected edges</label>
+    <form id="check">
+      <label><input type="checkbox" id="checkbox" name="checkbox">Hide directed edges</label>
+      <label><input type="checkbox" id="checkbox2" name="checkbox">Hide undirected edges</label>
     </form>
     <form id="buttons">
       <button type="button" id="sizeReset">Reset zoom</button>

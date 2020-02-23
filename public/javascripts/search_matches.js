@@ -18,17 +18,17 @@ var modules = new Bloodhound({
 // options being used
 
 
-$('#module .typeahead').typeahead(null, {
+$('#module-form input').typeahead(null, {
   name: 'id',
   source: modules
 });
 
-$('#gene .typeahead').typeahead(null, {
+$('#gene-form input').typeahead(null, {
   name: 'name',
   source: genes
 });
 
-$('#search .typeahead').typeahead(null, {
+$('#search-form input').typeahead(null, {
   name: 'name',
   source: genes
 });

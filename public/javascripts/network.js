@@ -1,9 +1,9 @@
 
-const form = document.getElementById('module')
+const form = document.getElementById('module-form')
 
-const gene = document.getElementById('gene')
+const gene = document.getElementById('gene-form')
 
-const search = document.getElementById("search")
+const search = document.getElementById("search-form")
 
 const checkbox = document.getElementById("checkbox");
 
@@ -11,7 +11,7 @@ const checkbox2 = document.getElementById("checkbox2");
 
 const sizeReset = document.getElementById("sizeReset");
 
-const go = document.getElementById("GO");
+const go = document.getElementById("GO-form");
 
 const size = document.getElementById("size")
 
