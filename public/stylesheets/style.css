@@ -15,6 +15,7 @@ body {
   width:100%;
   z-index: 0;
 }
+
 #gif{
   height: 400px;
   width: 400px;
@@ -25,32 +26,32 @@ body {
   margin-top: -50px;
   display:none;
 }
+
 a {
   color: #00B7FF;
 }
+
 .container{
   /* display:inline-block; */
   width:450px;
   background-color:rgba(0, 0, 0, 0.5);
   position:absolute;
   z-index: 1;
+  color: white;
 }
-#white{
-  -webkit-text-fill-color: white;
+
+.container form {
+  margin: 2em 0 2em 0;
 }
-#notwhite{
-  -webkit-text-fill-color: black;
+
+.container form input {
+  margin-bottom: 0.5em;
 }
-#check{
-  /* position: absolute; */
-  left: 50px;
-  top: 600px;
+
+.container form label {
+  display: block;
 }
-#reset{
-  /* position: absolute; */
-  left: 50px;
-  top: 700px;
-}
+
 #cy {
 
   width: 100%;
@@ -61,27 +62,10 @@ a {
   z-index: 1;
 }
 
-#module{
-  /* position: absolute; */
-  top: 150px;
-  left: 50px;
-}
-#gene{
-  /* position: absolute; */
-  top: 300px;
-  left: 50px;
-}
-#search{
-  /* position: absolute; */
-  top: 450px;
-  left: 50px;
-}
-
 .tip-link {
   display: block;
   color: #FFF;
 }
-
 
 .title {
   margin: 20px 0 0 0;
@@ -155,6 +139,7 @@ a {
   padding: 3px 20px;
   font-size: 18px;
   line-height: 24px;
+  color: #000;
 }
 
 .tt-suggestion:hover {
