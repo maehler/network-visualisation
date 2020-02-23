@@ -15,7 +15,7 @@ const go = document.getElementById("GO-form");
 
 const size = document.getElementById("size")
 
-const gif = document.getElementById("gif")
+const spinner = document.getElementById("network-spinner")
 
 const save = document.getElementById('save')
 
@@ -137,7 +137,7 @@ gene.addEventListener('submit',function(e){
 form.addEventListener('submit',function(e){
   goFlag = 0;
   e.preventDefault();
-  gif.style.display = "block";
+  spinner.style.display = "block";
   const formVal = form.elements['module_input'].value;
   filename = "module_"+formVal;
   getApi('/api/module/'+formVal).then((json)=>{
@@ -145,7 +145,7 @@ form.addEventListener('submit',function(e){
       $('#alert').remove();
       iniCy(json);
   }else{
-    gif.style.display = "none";
+    spinner.style.display = "none";
     $('#alert').remove();
     $('#module').append(`<div id="alert">Incorrect modul id</div>`);
   }
@@ -157,7 +157,7 @@ form.addEventListener('submit',function(e){
 gene.addEventListener('submit',function(e){
   goFlag = 0;
   e.preventDefault();
-  gif.style.display = "block";
+  spinner.style.display = "block";
   const gene_query = gene.elements['gene_input'].value
   filename = "Gene_"+gene_query;
   getApi('/api/gene?name='+gene_query).then((json)=>{
@@ -166,7 +166,7 @@ gene.addEventListener('submit',function(e){
   }).catch((error)=> {
     $('#alert').remove();
     $('#gene').append(`<div id="alert">Incorrect gene name</div>`);
-    gif.style.display = "none";
+    spinner.style.display = "none";
   });
 })
 
@@ -185,7 +185,7 @@ search.addEventListener('submit',function(e){
 
 go.addEventListener('submit', function(e){
   e.preventDefault();
-  gif.style.display = "block";
+  spinner.style.display = "block";
   const go_var = go.elements['GO_input'].value
   const color = go.elements['color_input'].value
   goIteration(go_var).then(go_list =>
@@ -193,7 +193,7 @@ go.addEventListener('submit', function(e){
       if(go_list.includes(ele.data("name"))){
         ele.style('background-color', color)
       }
-      gif.style.display = "none";
+      spinner.style.display = "none";
     }))
 })
 
@@ -269,7 +269,7 @@ documentation.addEventListener('click', function(){
 enrich.addEventListener('click', function(){
   if(goFlag ===0){
     goFlag = 1;
-    gif.style.display = "block";
+    spinner.style.display = "block";
     let nodeNames = []
     cy.nodes().forEach(function(ele){
       nodeNames.push(ele.data("name"))
@@ -289,7 +289,7 @@ enrich.addEventListener('click', function(){
       $(document).ready( function () {
         $('#goTable').DataTable();
       });
-      gif.style.display = "none";
+      spinner.style.display = "none";
       modal.style.display = "block";
     }
     )
@@ -494,6 +494,6 @@ function iniCy(json){
         cy.nodes().not(n).forEach(hideTippy);
       });
 
-      gif.style.display = "none";
+      spinner.style.display = "none";
   });
 }
