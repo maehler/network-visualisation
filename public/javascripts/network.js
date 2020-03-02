@@ -147,7 +147,7 @@ form.addEventListener('submit',function(e){
   }else{
     spinner.style.display = "none";
     $('#alert').remove();
-    $('#module').append(`<div id="alert">Incorrect modul id</div>`);
+    $('#module-form').append(`<div id="alert">Incorrect modul id</div>`);
   }
   }).catch((error)=> {
     console.error(error)
@@ -165,7 +165,7 @@ gene.addEventListener('submit',function(e){
     iniCy(json);
   }).catch((error)=> {
     $('#alert').remove();
-    $('#gene').append(`<div id="alert">Incorrect gene name</div>`);
+    $('#gene-form').append(`<div id="alert">Incorrect gene name</div>`);
     spinner.style.display = "none";
   });
 })
@@ -179,7 +179,7 @@ search.addEventListener('submit',function(e){
     cy.nodes(`node[name= "${gName}"]`).select()
   }else{
     $('#alert').remove();
-    $('#search').append(`<div id="alert">${gName} can't be found in displayed network</div>`);
+    $('#search-form').append(`<div id="alert">${gName} can't be found in displayed network</div>`);
   }
 });
 
