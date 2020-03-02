@@ -43,7 +43,9 @@ var hideTippy = function(node){
    }
  };
  var hideAllTippies = function(){
-    cy.nodes().forEach(hideTippy);
+     if (cy) {
+        cy.nodes().forEach(hideTippy);
+     }
   };
 // Fetch genes belonging to an annotation term
 async function term2gene(type, terms) {
@@ -125,13 +127,17 @@ async function enrichment(type, genes) {
 form.addEventListener('submit',function(e){
   e.preventDefault();
   hideAllTippies();
-  cy.destroy()
+  if (cy) {
+      cy.destroy()
+  }
 })
 
 gene.addEventListener('submit',function(e){
   e.preventDefault();
   hideAllTippies();
-  cy.destroy()
+  if (cy) {
+      cy.destroy()
+  }
 })
 
 form.addEventListener('submit',function(e){
