@@ -1,28 +1,24 @@
-var model = require('../model/network')
+var model = require('../model/network');
 
-
-
-function getNetwork(req, res){
+function getNetwork(req, res) {
   res.json(model.getNetwork());
 }
 
-function getModule(req, res){
+function getModule(req, res) {
   res.json(model.getModule(req.params.module_id));
 }
 
-function getSingleGene(req, res){
+function getSingleGene(req, res) {
   res.json(model.getSingleGene(req.query.name));
 }
 
-function getOnlyModules(req, res){
+function getOnlyModules(req, res) {
   res.json(model.getOnlyModules());
 }
 
-function getOnlyGenes(req, res){
+function getOnlyGenes(req, res) {
   res.json(model.getOnlyGenes());
 }
-
-
 
 module.exports.getSingleGene = getSingleGene;
 module.exports.getNetwork = getNetwork;
