@@ -1,24 +1,24 @@
-const db = require("better-sqlite3")("database/ignv.db");
-var util = require("util");
+const db = require('better-sqlite3')('database/ignv.db');
+var util = require('util');
 
 function pushEdges(obj, array) {
   array.push({
-    "group": "edges",
-    "data": {
-      "id": ("e"+obj.id),
-      "source": obj.node1,
-      "target": obj.node2,
-      "directionality": obj.directionality === 1
+    'group': 'edges',
+    'data': {
+      'id': ('e'+obj.id),
+      'source': obj.node1,
+      'target': obj.node2,
+      'directionality': obj.directionality === 1
     }
   });
 }
 
 function pushNodes(obj, array) {
   array.push({
-    "group": "nodes",
-    "data": {
-      "id": obj.id,
-      "name": obj.name
+    'group': 'nodes',
+    'data': {
+      'id': obj.id,
+      'name': obj.name
     }
   });
 }
@@ -37,7 +37,7 @@ var getNetwork = function() {
 }
 
 function getModule(moduleId) {
-  var nodeInsert = "SELECT id, name FROM node INNER JOIN node_module ON node_module.n_id = node.id WHERE node_module.m_id = ?";
+  var nodeInsert = 'SELECT id, name FROM node INNER JOIN node_module ON node_module.n_id = node.id WHERE node_module.m_id = ?';
 
   var apiData = [];
   var nodeId = [];
@@ -46,11 +46,11 @@ function getModule(moduleId) {
     pushNodes(node, apiData);
   }
 
-  var qMarks = "";
+  var qMarks = '';
   for (nId in nodeId) {
-    qMarks += "?,";
+    qMarks += '?,';
   }
-  qMarks = qMarks.replace(/,$/, "");
+  qMarks = qMarks.replace(/,$/, '');
 
   var edgeInsert = `SELECT id, node1, node2, directionality FROM edge WHERE node1 IN (${qMarks}) AND node2 IN (${qMarks})`;
   for (const edge of db.prepare(edgeInsert).iterate(...nodeId, ...nodeId)) {
@@ -76,7 +76,7 @@ function getSingleGene(name){
   var nodeIds = [];
   var qMarks = '';
   var edgeInsert = 'SELECT * FROM edge WHERE node1 = ? OR node2 = ?';
-  var getNodeId = "SELECT id FROM node WHERE name = ?";
+  var getNodeId = 'SELECT id FROM node WHERE name = ?';
 
   for (const node of db.prepare(getNodeId).iterate(name)) {
     var id = node;
@@ -88,9 +88,9 @@ function getSingleGene(name){
     nodeIds.push(edge.node2, edge.node1);
   }
   for(nodeId in nodeIds) {
-    qMarks += "?,";
+    qMarks += '?,';
   }
-  qMarks = qMarks.replace(/,$/, "");
+  qMarks = qMarks.replace(/,$/, '');
 
   var nodeInserts = `SELECT * FROM node WHERE id IN (${qMarks})`;
   for(const nodes of db.prepare(nodeInserts).iterate(...nodeIds)) {

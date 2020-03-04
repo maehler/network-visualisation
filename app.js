@@ -6,7 +6,7 @@ var apiRouter = require('./routes/api');
 var usersRouter = require('./routes/users');
 const documentationRouter = require('./routes/documenation')
 var jsRouter = require('./routes/js');
-var cytoscape = require("cytoscape");
+var cytoscape = require('cytoscape');
 var coseBilkent = require('cytoscape-cose-bilkent');
 
 var app = express();

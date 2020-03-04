@@ -3,19 +3,19 @@ const form = document.getElementById('module-form')
 
 const gene = document.getElementById('gene-form')
 
-const search = document.getElementById("search-form")
+const search = document.getElementById('search-form')
 
-const checkbox = document.getElementById("checkbox");
+const checkbox = document.getElementById('checkbox');
 
-const checkbox2 = document.getElementById("checkbox2");
+const checkbox2 = document.getElementById('checkbox2');
 
-const sizeReset = document.getElementById("sizeReset");
+const sizeReset = document.getElementById('sizeReset');
 
-const go = document.getElementById("GO-form");
+const go = document.getElementById('GO-form');
 
-const size = document.getElementById("size")
+const size = document.getElementById('size')
 
-const spinner = document.getElementById("network-spinner")
+const spinner = document.getElementById('network-spinner')
 
 const save = document.getElementById('save')
 
@@ -25,9 +25,9 @@ const documentation = document.getElementById('documentation')
 
 const enrich = document.getElementById('enrich')
 
-const modal = document.getElementById("myModal");
+const modal = document.getElementById('myModal');
 
-const span = document.getElementsByClassName("close")[0];
+const span = document.getElementsByClassName('close')[0];
 
 var cy;
 
@@ -51,10 +51,10 @@ var hideAllTippies = function() {
 
 // Fetch genes belonging to an annotation term
 async function term2gene(type, terms) {
-  const response = await fetch("https://franklin.upsc.se:5432/athaliana/term-to-gene", {
-    method: "POST",
+  const response = await fetch('https://franklin.upsc.se:5432/athaliana/term-to-gene', {
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json"
+      'Content-Type': 'application/json'
     },
     body  : JSON.stringify({
       target:[{
@@ -68,7 +68,7 @@ async function term2gene(type, terms) {
 }
 
 async function goIteration(GO) {
-  if ("GO" === GO.substring(0,2)) {
+  if ('GO' === GO.substring(0,2)) {
     const newGO  = (GO.split(' '));
     const response = term2gene('go', newGO).then(json => {
       goList =[];
@@ -95,10 +95,10 @@ async function goIteration(GO) {
 
 // Fetch annotations for one (or several) genes
 async function gene2term(type, genes) {
-  const response = await fetch("https://franklin.upsc.se:5432/athaliana/gene-to-term", {
-    method: "POST",
+  const response = await fetch('https://franklin.upsc.se:5432/athaliana/gene-to-term', {
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json"
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify({
       target: type,
@@ -110,10 +110,10 @@ async function gene2term(type, genes) {
 }
 
 async function enrichment(type, genes) {
-  const response = await fetch("https://franklin.upsc.se:5432/athaliana/enrichment", {
-    method: "POST",
+  const response = await fetch('https://franklin.upsc.se:5432/athaliana/enrichment', {
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json"
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify({
       target: type,
@@ -144,15 +144,15 @@ gene.addEventListener('submit',function(e) {
 form.addEventListener('submit',function(e) {
   goFlag = 0;
   e.preventDefault();
-  spinner.style.display = "block";
+  spinner.style.display = 'block';
   const formVal = form.elements['module_input'].value;
-  filename = "module_"+formVal;
+  filename = 'module_'+formVal;
   getApi('/api/module/'+formVal).then((json) => {
     if (typeof json[0] != 'undefined'){
       $('#alert').remove();
       iniCy(json);
     } else {
-      spinner.style.display = "none";
+      spinner.style.display = 'none';
       $('#alert').remove();
       $('#module-form').append(`<div id="alert">Incorrect modul id</div>`);
     }
@@ -164,16 +164,16 @@ form.addEventListener('submit',function(e) {
 gene.addEventListener('submit', function(e) {
   goFlag = 0;
   e.preventDefault();
-  spinner.style.display = "block";
+  spinner.style.display = 'block';
   const gene_query = gene.elements['gene_input'].value
-  filename = "Gene_"+gene_query;
+  filename = 'Gene_'+gene_query;
   getApi('/api/gene?name='+gene_query).then((json) => {
     $('#alert').remove();
     iniCy(json);
   }).catch((error)=> {
     $('#alert').remove();
     $('#gene-form').append(`<div id="alert">Incorrect gene name</div>`);
-    spinner.style.display = "none";
+    spinner.style.display = 'none';
   });
 });
 
@@ -192,15 +192,15 @@ search.addEventListener('submit', function(e) {
 
 go.addEventListener('submit', function(e) {
   e.preventDefault();
-  spinner.style.display = "block";
+  spinner.style.display = 'block';
   const go_var = go.elements['GO_input'].value;
   const color = go.elements['color_input'].value;
   goIteration(go_var).then(go_list => {
     cy.nodes().forEach(function(ele) {
-      if(go_list.includes(ele.data("name"))) {
+      if(go_list.includes(ele.data('name'))) {
         ele.style('background-color', color);
       }
-      spinner.style.display = "none";
+      spinner.style.display = 'none';
     });
   });
 });
@@ -247,14 +247,14 @@ save.addEventListener('click', function() {
       css: false,
       data: true,
       position: true,
-      discludeds: ["tippy"]
+      discludeds: ['tippy']
     },
     edge: {
       css: false,
       data: true,
-      discludeds: ["tippy"]
+      discludeds: ['tippy']
     },
-    layoutBy: "cose" // string of layout name or layout function
+    layoutBy: 'cose' // string of layout name or layout function
   };
   cy.graphml(optionsObj);
   text = cy.graphml();
@@ -283,10 +283,10 @@ documentation.addEventListener('click', function() {
 enrich.addEventListener('click', function() {
   if (goFlag === 0) {
     goFlag = 1;
-    spinner.style.display = "block";
+    spinner.style.display = 'block';
     let nodeNames = [];
     cy.nodes().forEach(function(ele) {
-      nodeNames.push(ele.data("name"));
+      nodeNames.push(ele.data('name'));
     });
     enrichment(['go'],nodeNames).then(json => {
       $('#goTable').remove()
@@ -303,21 +303,21 @@ enrich.addEventListener('click', function() {
       $(document).ready( function () {
         $('#goTable').DataTable();
       });
-      spinner.style.display = "none";
-      modal.style.display = "block";
+      spinner.style.display = 'none';
+      modal.style.display = 'block';
     });
   } else {
-    modal.style.display = "block";
+    modal.style.display = 'block';
   }
 });
 
 span.onclick = function() {
-  modal.style.display = "none";
+  modal.style.display = 'none';
 };
 
 window.onclick = function(event) {
   if (event.target == modal) {
-    modal.style.display = "none";
+    modal.style.display = 'none';
   }
 };
 
@@ -327,7 +327,7 @@ async function getApi(idOrName) {
     const json = await response.json();
     return json;
   } else {
-    const response = await fetch(`/api/`);
+    const response = await fetch('/api/');
     const json = await response.json();
     return json;
   }
@@ -369,39 +369,39 @@ function iniCy(json){
           'color': '#fff',
           'text-outline-color': '#888',
           'text-outline-width': 1,
-          "text-valign": "top",
-          "text-halign": "center",
+          'text-valign': 'top',
+          'text-halign': 'center',
           'border-width': '1',
           'border-color': 'black',
         }
       },
       {
-        "selector": 'edge',
-        "style": {
+        'selector': 'edge',
+        'style': {
           'width': 1,
           'curve-style': 'unbundled-bezier',
           'control-point-distance': '35px',
           'control-point-weight': '0.5',
-          'edge-distances': "node-position",
-          "control-point-step-size": "10px",
-          "opacity": "0.4",
-          "line-color": "#88A7CA",
-          "overlay-padding": "3px"
+          'edge-distances': 'node-position',
+          'control-point-step-size': '10px',
+          'opacity': '0.4',
+          'line-color': '#88A7CA',
+          'overlay-padding': '3px'
 
         }
       },
       {
-        "selector": 'node[[degree>=3]]',
-        "style": {
-          "height": "10",
-          "width": "10",
+        'selector': 'node[[degree>=3]]',
+        'style': {
+          'height': '10',
+          'width': '10',
         }
       },
       {
-        "selector": 'node[[degree>=5]]',
-        "style": {
-          "height": "14",
-          "width": "14",
+        'selector': 'node[[degree>=5]]',
+        'style': {
+          'height': '14',
+          'width': '14',
         }
       },
       {
@@ -416,18 +416,18 @@ function iniCy(json){
         style: {
           'font-size': 10,
           'text-outline-width': 3,
-          "text-valign": "top",
+          'text-valign': 'top',
         },
       },
       {
-        selector: "edge:selected",
+        selector: 'edge:selected',
         style: {
           'line-color': 'red',
 
         },
       },
       {
-        selector: "node[module]",
+        selector: 'node[module]',
         style: {
           'background-color': '#FFF'
         }
@@ -497,10 +497,10 @@ function iniCy(json){
         name: 'Arabidopsis.org',
         url: 'https://www.arabidopsis.org/servlets/TairObject?name='+g+'&type=locus'
       }, {
-        name: "Uniprot search",
+        name: 'Uniprot search',
         url : 'https://www.uniprot.org/uniprot/?query='+g+'&sort=score'
       }, {
-        name: "Geneontology search",
+        name: 'Geneontology search',
         url : 'http://amigo.geneontology.org/amigo/search/bioentity?q='+g
       },
     ].map(function(link) {
@@ -515,6 +515,6 @@ function iniCy(json){
       cy.nodes().not(n).forEach(hideTippy);
     });
 
-    spinner.style.display = "none";
+    spinner.style.display = 'none';
   });
 }
