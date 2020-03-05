@@ -1,102 +1,86 @@
-
+<!doctype html>
 <html lang="en">
 
 <head>
-  <title>SeedTransNet</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.css"/>
-
-  <link rel="stylesheet" href="/stylesheets/style.css">
-
-
-
+    <title>SeedTransNet</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.css"/>
+    <link rel="stylesheet" href="/stylesheets/style.css">
 </head>
 
 <body>
-  <div id="cy"> </div>
-  <div class="container" id="displaybox">
-  <h1 id="white">SeedTransNet</h1>
-  <p id="white">Welcome to SeedTransNet network visualization</p>
+    <div id="cy"> </div>
+    <div class="container">
+        <h1>SeedTransNet</h1>
+        <p>Welcome to SeedTransNet network visualization</p>
 
+        <form id="module-form">
+            <label>Select network module of interest</label>
+            <input class="typeahead" type="text" value="" placeholder="Leave empty for whole network" name="module_input">
+            <button type="submit">Visualize module</button>
+        </form>
 
-    <form id="module">
-      <br></br>
-      <label id="white">Select network module of interest</label>
-      <br></br>
-      <input class ='typeahead'type="text" value = '' placeholder='Leave empty for whole network'name='module_input'>
-      <br><br>
-      <button type="submit">Visualize module</button>
-    </form>
-    <br></br>
-    <form id="gene">
-      <label id="white">Select specific gene of interest</label>
-      <br></br>
-      <input type="text" class= 'typeahead' value="" name="gene_input">
-      <br><br>
-      <button type="submit">Visualize gene</button>
-    </form>
-    <br></br>
-    <form id="search">
-      <label id="white">Search for gene in current network</label>
-      <br id="alertmess"></br>
-      <input type="text" class= 'typeahead' value=""  name="search_input"></label>
-      <br><br>
-      <button type="submit">Select gene of interest</button>
-    </form>
-    <br></br>
-    <form id="GO">
-      <label id="white">Color genes based on GO/Pfam annotation</label>
-      <br></br>
-      <input type="text" class= 'typeahead' value=""  name="GO_input" placeholder="GO/Pfam annotation of choice"></label>
-      <br><br>
-      <input type="text" class= 'typeahead' value=""  name="color_input" placeholder="Color of choice"></label>
-      <br><br>
-      <button type="submit">Color genes of interest</button>
-      <button id="colorReset" type="submit">Reset colors of the nodes</button>
-    </form>
-    <form id="check" >
-      <label id="white"><input type="checkbox" id= "checkbox" name= "checkbox">   Hide directed edges</label>
-      <br></br>
-      <label id="white"><input type="checkbox" id= "checkbox2" name= "checkbox">   Hide undirected edges</label>
-    </form>
-    <form id="buttons">
-      <button type="button" id="sizeReset">Reset zoom</button>
-      <button type="button" id="save">Save graph to .graphml</button>
-      <br></br>
-      <button type="button" id="documentation">Documentation</button>
-      <button type="button" id="enrich">GO enrichment</button>
-    </form>
-  </div>
-  <div id="myModal" class="modal">
+        <form id="gene-form">
+            <label>Select specific gene of interest</label>
+            <input type="text" class="typeahead" value="" name="gene_input">
+            <button type="submit">Visualize gene</button>
+        </form>
 
-  <!-- Modal content -->
-  <div class="modal-content">
-    <span class="close">&times;</span>
-  </div>
+        <form id="search-form">
+            <label>Search for gene in current network</label>
+            <input type="text" class="typeahead" value="" name="search_input">
+            <button type="submit">Select gene of interest</button>
+        </form>
 
-</div>
-  <div class=loader>
-    <img src="images/loading.gif" id="gif" alt="animated">
-  </div>
-  <script src="js/cytoscape.min.js"></script>
-  <script src="https://unpkg.com/layout-base/layout-base.js"></script>
-  <script src="https://unpkg.com/cose-base/cose-base.js"></script>
-  <script src="js/cytoscape-cose-bilkent.js"></script>
-  <script src="https://unpkg.com/popper.js@1.14.4/dist/umd/popper.js"></script>
-  <script src="https://unpkg.com/tippy.js@2.6.0/dist/tippy.all.js"></script>
-  <script src="javascripts/network.js"></script>
-  <script src="js/jquery.min.js"></script>
-  <script src ='js/typeahead.jquery.min.js'></script>
-  <script src ='js/bloodhound.min.js'></script>
-  <script src="javascripts/search_matches.js"></script>
+        <form id="GO-form">
+            <label>Color genes based on GO/Pfam annotation</label>
+            <input type="text" class="typeahead" value="" name="GO_input" placeholder="GO/Pfam annotation of choice">
+            <input type="text" class="typeahead" value=""  name="color_input" placeholder="Color of choice">
+            <button type="submit">Color genes of interest</button>
+            <button id="colorReset" type="submit">Reset colors of the nodes</button>
+        </form>
 
+        <form id="check">
+            <label><input type="checkbox" id="checkbox" name="checkbox">Hide directed edges</label>
+            <label><input type="checkbox" id="checkbox2" name="checkbox">Hide undirected edges</label>
+        </form>
 
-  <script src="js/cytoscape-graphml.js"></script>
-  <script src="https://unpkg.com/cytoscape-popper@1.0.2/cytoscape-popper.js"></script>
-  <!-- <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script> -->
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-  <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.js"></script>
+        <form id="buttons">
+            <button type="button" id="sizeReset">Reset zoom</button>
+            <button type="button" id="save">Save graph to .graphml</button>
+            <button type="button" id="documentation">Documentation</button>
+            <button type="button" id="enrich">GO enrichment</button>
+        </form>
+    </div>
+
+    <div id="myModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+        </div>
+    </div>
+
+    <div class="spinner-container" id="network-spinner">
+        <img src="images/loading.gif" id="gif" alt="animated">
+    </div>
+
+    <script src="js/cytoscape.min.js"></script>
+    <script src="https://unpkg.com/layout-base/layout-base.js"></script>
+    <script src="https://unpkg.com/cose-base/cose-base.js"></script>
+    <script src="js/cytoscape-cose-bilkent.js"></script>
+    <script src="https://unpkg.com/popper.js@1.14.4/dist/umd/popper.js"></script>
+    <script src="https://unpkg.com/tippy.js@2.6.0/dist/tippy.all.js"></script>
+    <script src="javascripts/network.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src='js/typeahead.jquery.min.js'></script>
+    <script src='js/bloodhound.min.js'></script>
+    <script src="javascripts/search_matches.js"></script>
+
+    <script src="js/cytoscape-graphml.js"></script>
+    <script src="https://unpkg.com/cytoscape-popper@1.0.2/cytoscape-popper.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.js"></script>
 </body>
-
 </html>

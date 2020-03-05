@@ -3,7 +3,7 @@ var genes = new Bloodhound({
   queryTokenizer: Bloodhound.tokenizers.whitespace,
   // url points to a json file that contains an array of country names, see
   // https://github.com/twitter/typeahead.js/blob/gh-pages/data/countries.json
-  prefetch: 'http://localhost:3000/api/genes'
+  prefetch: '/api/genes'
 });
 
 var modules = new Bloodhound({
@@ -11,24 +11,24 @@ var modules = new Bloodhound({
   queryTokenizer: Bloodhound.tokenizers.whitespace,
   // url points to a json file that contains an array of country names, see
   // https://github.com/twitter/typeahead.js/blob/gh-pages/data/countries.json
-  prefetch: 'http://localhost:3000/api/modules'
+  prefetch: '/api/modules'
 });
 
 // passing in `null` for the `options` arguments will result in the default
 // options being used
 
 
-$('#module .typeahead').typeahead(null, {
+$('#module-form input').typeahead(null, {
   name: 'id',
   source: modules
 });
 
-$('#gene .typeahead').typeahead(null, {
+$('#gene-form input').typeahead(null, {
   name: 'name',
   source: genes
 });
 
-$('#search .typeahead').typeahead(null, {
+$('#search-form input').typeahead(null, {
   name: 'name',
   source: genes
 });

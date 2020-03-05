@@ -6,16 +6,10 @@ var apiRouter = require('./routes/api');
 var usersRouter = require('./routes/users');
 const documentationRouter = require('./routes/documenation')
 var jsRouter = require('./routes/js');
-var cytoscape = require("cytoscape");
+var cytoscape = require('cytoscape');
 var coseBilkent = require('cytoscape-cose-bilkent');
 
-
-
-
 var app = express();
-
-
-
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -34,4 +28,5 @@ app.use('/js', jsRouter);
 app.listen(3000, function() {
   console.log('Example app listening on port 3000!');
 });
+
 module.exports = app;
