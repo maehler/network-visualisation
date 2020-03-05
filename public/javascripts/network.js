@@ -361,7 +361,7 @@ function iniCy(json){
     style: [ // the stylesheet for the graph
       {
         selector: 'node',
-        style:{
+        style: {
           'background-color': '#666',
           'border-color': 'black',
           'label': 'data(name)',
@@ -376,8 +376,8 @@ function iniCy(json){
         }
       },
       {
-        'selector': 'edge',
-        'style': {
+        selector: 'edge',
+        style: {
           'width': 1,
           'curve-style': 'unbundled-bezier',
           'control-point-distance': '35px',
@@ -391,15 +391,15 @@ function iniCy(json){
         }
       },
       {
-        'selector': 'node[[degree>=3]]',
-        'style': {
+        selector: 'node[[degree>=3]]',
+        style: {
           'height': '10',
           'width': '10',
         }
       },
       {
-        'selector': 'node[[degree>=5]]',
-        'style': {
+        selector: 'node[[degree>=5]]',
+        style: {
           'height': '14',
           'width': '14',
         }
@@ -423,7 +423,6 @@ function iniCy(json){
         selector: 'edge:selected',
         style: {
           'line-color': 'red',
-
         },
       },
       {

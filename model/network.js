@@ -3,22 +3,22 @@ var util = require('util');
 
 function pushEdges(obj, array) {
   array.push({
-    'group': 'edges',
-    'data': {
-      'id': ('e'+obj.id),
-      'source': obj.node1,
-      'target': obj.node2,
-      'directionality': obj.directionality === 1
+    group: 'edges',
+    data: {
+      id: ('e'+obj.id),
+      source: obj.node1,
+      target: obj.node2,
+      directionality: obj.directionality === 1
     }
   });
 }
 
 function pushNodes(obj, array) {
   array.push({
-    'group': 'nodes',
-    'data': {
-      'id': obj.id,
-      'name': obj.name
+    group: 'nodes',
+    data: {
+      id: obj.id,
+      name: obj.name
     }
   });
 }
