@@ -29,7 +29,103 @@ const modal = document.getElementById('myModal');
 
 const span = document.getElementsByClassName('close')[0];
 
-var cy;
+var cy = cytoscape({
+  container: document.getElementById('cy'), // container to render in
+  style: [ // the stylesheet for the graph
+    {
+      selector: 'node',
+      style: {
+        'background-color': '#666',
+        'border-color': 'black',
+        'label': 'data(name)',
+        'font-size': 4,
+        'color': '#fff',
+        'text-outline-color': '#888',
+        'text-outline-width': 1,
+        'text-valign': 'top',
+        'text-halign': 'center',
+        'border-width': '1',
+        'border-color': 'black',
+      }
+    },
+    {
+      selector: 'edge',
+      style: {
+        'width': 1,
+        'curve-style': 'unbundled-bezier',
+        'control-point-distance': '35px',
+        'control-point-weight': '0.5',
+        'edge-distances': 'node-position',
+        'control-point-step-size': '10px',
+        'opacity': '0.4',
+        'line-color': '#88A7CA',
+        'overlay-padding': '3px'
+
+      }
+    },
+    {
+      selector: 'node',
+      style: {
+        'height': '10',
+        'width': '10'
+      }
+    },
+    {
+      selector: 'node[[degree>=3]]',
+      style: {
+        'height': '10',
+        'width': '10',
+      }
+    },
+    {
+      selector: 'node[[degree>=5]]',
+      style: {
+        'height': '14',
+        'width': '14',
+      }
+    },
+    {
+      selector: 'edge[?directionality]',
+      style : {
+        'target-arrow-color': '#88A7CA',
+        'target-arrow-shape': 'vee'
+      }
+    },
+    {
+      selector: 'node:selected',
+      style: {
+        'font-size': 10,
+        'text-outline-width': 3,
+        'text-valign': 'top',
+      },
+    },
+    {
+      selector: 'edge:selected',
+      style: {
+        'line-color': 'red',
+      },
+    },
+    {
+      selector: 'node[module]',
+      style: {
+        'background-color': '#FFF'
+      }
+    },
+  ]
+});
+
+var layout = cy.layout({
+  name: 'fcose',
+  animate: true
+})
+  .on('layoutstart', () => {
+    console.log('layout started');
+    spinner.style.display = 'block';
+  })
+  .on('layoutstop', () => {
+    console.log('layout stopped');
+    spinner.style.display = 'none';
+  });
 
 let goFlag = 0;
 
@@ -124,8 +220,7 @@ async function enrichment(type, genes) {
   return json;
 }
 
-
-form.addEventListener('submit',function(e) {
+gene.addEventListener('submit', function(e) {
   e.preventDefault();
   hideAllTippies();
   if (cy) {
@@ -133,32 +228,12 @@ form.addEventListener('submit',function(e) {
   }
 });
 
-gene.addEventListener('submit',function(e) {
-  e.preventDefault();
-  hideAllTippies();
-  if (cy) {
-    cy.destroy()
-  }
-});
-
-form.addEventListener('submit',function(e) {
+form.addEventListener('submit', function(e) {
   goFlag = 0;
   e.preventDefault();
-  spinner.style.display = 'block';
   const formVal = form.elements['module_input'].value;
   filename = 'module_'+formVal;
-  getApi('/api/module/'+formVal).then((json) => {
-    if (typeof json[0] != 'undefined'){
-      $('#alert').remove();
-      iniCy(json);
-    } else {
-      spinner.style.display = 'none';
-      $('#alert').remove();
-      $('#module-form').append(`<div id="alert">Incorrect modul id</div>`);
-    }
-  }).catch((error) => {
-    console.error(error)
-  });
+  getNetworkModule(formVal, loadData);
 });
 
 gene.addEventListener('submit', function(e) {
@@ -169,7 +244,7 @@ gene.addEventListener('submit', function(e) {
   filename = 'Gene_'+gene_query;
   getApi('/api/gene?name='+gene_query).then((json) => {
     $('#alert').remove();
-    iniCy(json);
+    loadData(json);
   }).catch((error)=> {
     $('#alert').remove();
     $('#gene-form').append(`<div id="alert">Incorrect gene name</div>`);
@@ -216,11 +291,11 @@ checkbox.addEventListener('change', function() {
   if (this.checked) {
     // indicate the end of your new stylesheet so that it can be updated on elements
     cy.style().selector('edge[?directionality]')
-      .style({'display': 'none',}).update();
+    .style({'display': 'none'}).update();
   } else {
     // indicate the end of your new stylesheet so that it can be updated on elements`node[name=${ele.data("name")}]`
     cy.style().selector('edge[?directionality]')
-      .style({'display': 'element',}).update();
+    .style({'display': 'element'}).update();
   }
 });
 
@@ -228,12 +303,12 @@ checkbox2.addEventListener('change', function() {
   if (this.checked) {
     // indicate the end of your new stylesheet so that it can be updated on elements
     cy.style().selector('edge[!directionality]')
-      .style({'display': 'none',}).update()
+    .style({'display': 'none'}).update()
   } else {
     // indicate the end of your new stylesheet so that it can be updated on elements
     cy.style().selector('edge[!directionality]')
-      .style({'display': 'element',})
-      .update();
+    .style({'display': 'element'})
+    .update();
   }
 });
 
@@ -333,187 +408,26 @@ async function getApi(idOrName) {
   }
 }
 
-function iniCy(json){
-  var h = function(tag, attrs, children) {
-    var el = document.createElement(tag);
-
-    Object.keys(attrs).forEach(function(key) {
-      var val = attrs[key];
-      el.setAttribute(key, val);
-    });
-
-    children.forEach(function(child) {
-      el.appendChild(child);
-    });
-
-    return el;
-  };
-
-  var t = function(text) {
-    var el = document.createTextNode(text);
-    return el;
-  };
-
-  // console.log(json);//debuggin reasons
-  cy = cytoscape({
-    container: document.getElementById('cy'), // container to render in
-    elements: json,
-    style: [ // the stylesheet for the graph
-      {
-        selector: 'node',
-        style: {
-          'background-color': '#666',
-          'border-color': 'black',
-          'label': 'data(name)',
-          'font-size': 4,
-          'color': '#fff',
-          'text-outline-color': '#888',
-          'text-outline-width': 1,
-          'text-valign': 'top',
-          'text-halign': 'center',
-          'border-width': '1',
-          'border-color': 'black',
-        }
-      },
-      {
-        selector: 'edge',
-        style: {
-          'width': 1,
-          'curve-style': 'unbundled-bezier',
-          'control-point-distance': '35px',
-          'control-point-weight': '0.5',
-          'edge-distances': 'node-position',
-          'control-point-step-size': '10px',
-          'opacity': '0.4',
-          'line-color': '#88A7CA',
-          'overlay-padding': '3px'
-
-        }
-      },
-      {
-        selector: 'node[[degree>=3]]',
-        style: {
-          'height': '10',
-          'width': '10',
-        }
-      },
-      {
-        selector: 'node[[degree>=5]]',
-        style: {
-          'height': '14',
-          'width': '14',
-        }
-      },
-      {
-        selector: 'edge[?directionality]',
-        style : {
-          'target-arrow-color': '#88A7CA',
-          'target-arrow-shape': 'vee'
-        }
-      },
-      {
-        selector: 'node:selected',
-        style: {
-          'font-size': 10,
-          'text-outline-width': 3,
-          'text-valign': 'top',
-        },
-      },
-      {
-        selector: 'edge:selected',
-        style: {
-          'line-color': 'red',
-        },
-      },
-      {
-        selector: 'node[module]',
-        style: {
-          'background-color': '#FFF'
-        }
-      },
-    ],
-    // layout:{
-    //   name: 'cose-bilkent',
-    //   idealEdgeLength: 120,
-    // }
-  });
-
-  var layout = cy.layout({
-    name: 'cose-bilkent',
-    animate : 'end',
-    nodeDimensionsIncludeLabels: false,
-    // nodeRepulsion: 45000,
-    avoidOverlap: true,
-    idealEdgeLength: 120,
-    numIter: 5000,
-
-  });
-
-  layout.pon('layoutstop').then(function(e) {
-    cy.nodes().forEach(function(ele) {
-      const deg = ele.degree();
-      if (deg < 20) {
-        ele.style('height', deg+4);
-        ele.style('width', deg+4);
-      }
+function layoutGraph() {
+  cy.layout({
+      name: 'fcose',
+      animate: true
     })
-  });
+      .on('layoutstart', () => {
+        console.log('layout started');
+        spinner.style.display = 'block';
+      })
+      .on('layoutstop', () => {
+        console.log('layout stopped');
+        spinner.style.display = 'none';
+      }).run();
+}
 
-  layout.run();
+function loadData(json) {
+  console.log('loading elements');
+  cy.elements().remove();
+  cy.add(json);
 
-  // Created popup elements when selecting nodes with links inside
-  var makeTippy = function(node, html) {
-    return tippy(node.popperRef(), {
-      html: html,
-      trigger: 'manual',
-      arrow: true,
-      placement: 'bottom',
-      hideOnClick: false,
-      interactive: true
-    }).tooltips[0];
-  };
-
-
-
-  cy.on('tap', function(e) {
-    if (e.target === cy) {
-      hideAllTippies();
-    }
-  });
-
-  cy.on('tap', 'edge', function(e) {
-    hideAllTippies();
-  });
-
-  cy.on('zoom pan', function(e) {
-    hideAllTippies();
-  });
-
-  cy.nodes().forEach(function(n) {
-    var g = n.data('name');
-    var $links = [
-      {
-        name: 'Arabidopsis.org',
-        url: 'https://www.arabidopsis.org/servlets/TairObject?name='+g+'&type=locus'
-      }, {
-        name: 'Uniprot search',
-        url : 'https://www.uniprot.org/uniprot/?query='+g+'&sort=score'
-      }, {
-        name: 'Geneontology search',
-        url : 'http://amigo.geneontology.org/amigo/search/bioentity?q='+g
-      },
-    ].map(function(link) {
-      return h('a', {target: '_blank', href: link.url, 'class': 'tip-link'}, [t(link.name)]);
-    });
-    var tippy = makeTippy(n, h('div', {}, $links));
-
-    n.data('tippy', tippy);
-
-    n.on('click', function(e) {
-      tippy.show();
-      cy.nodes().not(n).forEach(hideTippy);
-    });
-
-    spinner.style.display = 'none';
-  });
+  console.log('layouting graph');
+  layoutGraph();
 }

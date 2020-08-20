@@ -10,6 +10,8 @@
     "better-sqlite3": "^5.4.3",
     "cytoscape": "^3.12.1",
     "cytoscape-cose-bilkent": "^4.1.0",
+    "cose-base": "^1.0.3",
+    "cytoscape-fcose": "^1.2.3",
     "cytoscape-graphml": "^1.0.6",
     "express": "~4.16.1",
     "jquery": "^3.4.1",
