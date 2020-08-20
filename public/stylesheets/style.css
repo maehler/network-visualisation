@@ -40,10 +40,11 @@ body {
 }
 
 .spinner-container {
-  float: right;
+  position: fixed;
+  top: 0;
+  right: 0;
   height: 200px;
   width: 200px;
-  margin-left: 450px; /* width of .container */
   z-index: 0;
   display: none;
 }
