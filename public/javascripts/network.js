@@ -29,6 +29,25 @@ const modal = document.getElementById('myModal');
 
 const span = document.getElementsByClassName('close')[0];
 
+function setMessage(msg, msgType) {
+  var parentDiv = document.getElementById('user-alert');
+  var div = document.createElement('div');
+
+  div.classList = `alert alert-${msgType}`;
+  div.appendChild(document.createTextNode(msg));
+  parentDiv.appendChild(div);
+
+  div.onanimationend = (e) => {
+    if (e.srcElement.classList.contains('fade-out')) {
+      parentDiv.removeChild(e.srcElement);
+    }
+  };
+
+  setTimeout(() => {
+    div.classList.add('fade-out');
+  }, 2000);
+}
+
 var cy = cytoscape({
   container: document.getElementById('cy'), // container to render in
   style: [ // the stylesheet for the graph
@@ -113,19 +132,6 @@ var cy = cytoscape({
     },
   ]
 });
-
-var layout = cy.layout({
-  name: 'fcose',
-  animate: true
-})
-  .on('layoutstart', () => {
-    console.log('layout started');
-    spinner.style.display = 'block';
-  })
-  .on('layoutstop', () => {
-    console.log('layout stopped');
-    spinner.style.display = 'none';
-  });
 
 let goFlag = 0;
 
@@ -223,9 +229,6 @@ async function enrichment(type, genes) {
 gene.addEventListener('submit', function(e) {
   e.preventDefault();
   hideAllTippies();
-  if (cy) {
-    cy.destroy()
-  }
 });
 
 form.addEventListener('submit', function(e) {
@@ -242,14 +245,7 @@ gene.addEventListener('submit', function(e) {
   spinner.style.display = 'block';
   const gene_query = gene.elements['gene_input'].value
   filename = 'Gene_'+gene_query;
-  getApi('/api/gene?name='+gene_query).then((json) => {
-    $('#alert').remove();
-    loadData(json);
-  }).catch((error)=> {
-    $('#alert').remove();
-    $('#gene-form').append(`<div id="alert">Incorrect gene name</div>`);
-    spinner.style.display = 'none';
-  });
+  getGeneNeighbourhood(gene_query, loadData);
 });
 
 //Selects node thats in the search field
@@ -257,11 +253,9 @@ search.addEventListener('submit', function(e) {
   e.preventDefault();
   const gName = search.elements['search_input'].value;
   if (cy.nodes(`node[name= "${gName}"]`).select().size() != 0) {
-    $('#alert').remove();
     cy.nodes(`node[name= "${gName}"]`).select()
   } else {
-    $('#alert').remove();
-    $('#search-form').append(`<div id="alert">${gName} can't be found in displayed network</div>`);
+    setMessage(`"Gene ${gName}" can't be found in the current network`, 'danger');
   }
 });
 
@@ -396,38 +390,27 @@ window.onclick = function(event) {
   }
 };
 
-async function getApi(idOrName) {
-  if (idOrName && (!(idOrName == '/api/module/'))) {
-    const response = await fetch(idOrName);
-    const json = await response.json();
-    return json;
-  } else {
-    const response = await fetch('/api/');
-    const json = await response.json();
-    return json;
-  }
-}
-
 function layoutGraph() {
   cy.layout({
       name: 'fcose',
       animate: true
     })
       .on('layoutstart', () => {
-        console.log('layout started');
         spinner.style.display = 'block';
       })
       .on('layoutstop', () => {
-        console.log('layout stopped');
         spinner.style.display = 'none';
       }).run();
 }
 
-function loadData(json) {
-  console.log('loading elements');
+function loadData(elements) {
+  if (elements.error) {
+    setMessage(elements.error, 'danger');
+    console.error(elements.error);
+    spinner.style.display = 'none';
+    return;
+  }
   cy.elements().remove();
-  cy.add(json);
-
-  console.log('layouting graph');
+  cy.add(elements);
   layoutGraph();
 }

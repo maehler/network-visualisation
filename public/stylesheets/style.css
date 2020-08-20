@@ -9,6 +9,36 @@ body {
   font-size: 15px;
 }
 
+#user-alert {
+  display: flex;
+  float: right;
+  flex-direction: column;
+  width: 25%;
+  padding-top: 1em;
+  padding-right: 1em;
+}
+
+.fade-out {
+  animation: fade 2s;
+  -moz-animation: fade 2s;
+  -webkit-animation: fade 2s;
+}
+
+@keyframes fade {
+  from {opacity: 1}
+  to {opacity: 0}
+}
+
+@-moz-keyframes fade {
+  from {opacity: 1}
+  to {opacity: 0}
+}
+
+@-webkit-keyframes fade {
+  from {opacity: 1}
+  to {opacity: 0}
+}
+
 .spinner-container {
   float: right;
   height: 200px;

@@ -46,6 +46,10 @@ function getModule(moduleId) {
     pushNodes(node, apiData);
   }
 
+  if (nodeId.length === 0) {
+    return {error: `Module ${moduleId} not found`};
+  }
+
   var qMarks = '';
   for (nId in nodeId) {
     qMarks += '?,';
@@ -81,6 +85,11 @@ function getSingleGene(name){
   for (const node of db.prepare(getNodeId).iterate(name)) {
     var id = node;
   }
+
+  if (!id) {
+    return {error: `Gene "${name}" not found in the network`};
+  }
+
   nodeIds.push(id.id);
 
   for (const edge of db.prepare(edgeInsert).iterate(id.id, id.id)) {
