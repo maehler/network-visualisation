@@ -1,4 +1,3 @@
-
 const form = document.getElementById('module-form')
 
 const gene = document.getElementById('gene-form')
@@ -133,23 +132,61 @@ var cy = cytoscape({
   ]
 });
 
+function makeTippy(node) {
+  var ref = node.popperRef();
+  var dummyDiv = document.createElement('div');
+
+  var tip = tippy(dummyDiv, {
+    onCreate: instance => {
+      instance.popperInstance.reference = ref;
+    },
+    lazy: false,
+    trigger: 'manual',
+    content: () => {
+      let gene = node.data().name;
+      let links = [
+        {
+          name: 'Arabidopsis.org',
+          url: `https://www.arabidopsis.org/servlets/TairObject?name=${gene}&type=locus`
+        }, {
+          name: 'Uniprot search',
+          url : `https://www.uniprot.org/uniprot/?query=${gene}&sort=score`
+        }, {
+          name: 'Geneontology search',
+          url : `http://amigo.geneontology.org/amigo/search/bioentity?q=${gene}`
+        }
+      ];
+
+      let div = document.createElement('div');
+      links.forEach(link => {
+        let a = document.createElement('a');
+        a.href = link.url;
+        a.classList.add('tip-link');
+        a.setAttribute('target', '_blank');
+        a.setAttribute('rel', 'noreferrer noopener');
+        a.appendChild(document.createTextNode(link.name));
+        div.appendChild(a);
+      });
+
+      return div;
+    },
+    placement: 'bottom',
+    interactive: true,
+    appendTo: document.body
+  });
+
+  return tip;
+}
+
+cy.on('tap', 'node', (e) => {
+  let node = e.target;
+  let tip = makeTippy(node);
+  tip.show();
+});
+
 let goFlag = 0;
 
 var filename;
-
-var hideTippy = function(node){
-  var tippy = node.data('tippy');
-
-  if(tippy != null) {
-    tippy.hide();
-  }
-};
-
-var hideAllTippies = function() {
-  if (cy) {
-    cy.nodes().forEach(hideTippy);
-  }
-};
 
 // Fetch genes belonging to an annotation term
 async function term2gene(type, terms) {

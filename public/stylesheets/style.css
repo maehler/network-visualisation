@@ -89,9 +89,12 @@ a {
   z-index: 1;
 }
 
+.tippy-content {
+  text-align: center;
+}
+
 .tip-link {
   display: block;
-  color: #FFF;
 }
 
 .title {
