@@ -1,4 +1,5 @@
 var express = require('express');
+var consolidate = require('consolidate');
 var path = require('path');
 var logger = require('morgan');
 var indexRouter = require('./routes/index');
@@ -11,11 +12,13 @@ var coseBilkent = require('cytoscape-cose-bilkent');
 
 var app = express();
 
+app.engine('html', consolidate.whiskers);
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
-app.set('views', path.join(__dirname, 'public'));
+app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'html');
 
 app.use('/documentation', documentationRouter);
