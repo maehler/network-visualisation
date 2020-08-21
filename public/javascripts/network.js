@@ -263,11 +263,6 @@ async function enrichment(type, genes) {
   return json;
 }
 
-gene.addEventListener('submit', function(e) {
-  e.preventDefault();
-  hideAllTippies();
-});
-
 form.addEventListener('submit', function(e) {
   goFlag = 0;
   e.preventDefault();
@@ -375,15 +370,6 @@ save.addEventListener('click', function() {
 
   document.body.removeChild(element);
 
-});
-
-documentation.addEventListener('click', function() {
-  var element = document.createElement('a');
-  element.setAttribute('href', 'https://github.com/Fattigman/projectHt2019Jacob/');
-  element.style.display = 'none';
-  document.body.appendChild(element);
-  element.click();
-  document.body.removeChild(element);
 });
 
 enrich.addEventListener('click', function() {

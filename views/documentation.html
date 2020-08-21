@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>SeedTransNet</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.css"/>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+
+<body>
+  <main>
+    <h1>Documentation</h1>
+
+    <h2>General</h2>
+    <p>
+      The network is visualized as nodes (genes) connected by edges.
+      The size of the nodes correspond to the degree of the nodes, <i>i.e.</i> how many other nodes they are connected to.
+      Edges can either be directed (indicated by an arrow), or undirected.
+    </p>
+
+    <h2>Network modules</h2>
+    <p>
+      Network modules can be visualized separately by choosing the id of the module to visualise.
+      These are generally quick to load, easy to manipulate and navigate.
+      By leaving the input empty and clicking "Visualize module", the entire network will be drawn.
+      This is an expensive operation that will take time, and the interface will likely become very slow.
+      Only do this if you really have to.
+    </p>
+
+    <h2>Gene neighborhoods</h2>
+    <p>
+      Instead of visualizing a pre-defined network module, you can also visualize the neighborhood of a particular gene.
+      Enter the identifier of the gene that you are interested in and click "Visualize neighborhood".
+      This will display the first degree neighbors of the gene, <i>i.e.</i> the genes that are connected directly to the gene of interest.
+    </p>
+
+    <h2>Finding genes in the network</h2>
+    <p>
+      If there are a lot of nodes in the network, it can be difficult to visually find the gene of interest.
+      Therefore you can search for a gene in the current network, and it will be highlighted if it exists.
+      Simply enter a gene identifier and click "Select gene of interest".
+    </p>
+
+    <h2>Annotations</h2>
+    <p>
+      Nodes can be colored according to Gene Ontology (GO) or protein family (Pfam) terms.
+      Enter an annotation term ID and a the color that should be associated with it and click "Color genes of interest".
+      The colors can be reset by clicking "Reset node colors".
+    </p>
+    <p>
+      One current limitation is that a node can only have one color at a time.
+      If several terms are colored, and a gene belongs to more than one of them, the node will have the last color applied.
+    </p>
+
+    <h2>Hiding edges</h2>
+    <p>
+      Edges can be hidden based on whether they are directed or not.
+      Simply check "Hide directed edges" or "Hide undirected edges".
+    </p>
+
+    <h2>GO enrichment</h2>
+    <p>
+      Functional enrichment can be tested by clicking the button labelled "GO enrichment".
+      This will test for enrichment of GO terms in the currently displayed network using <a href="https://github.com/bschiffthaler/gofer2">gofer2</a>.
+      The test will run in the background, and once the results are ready a table with the results will appear.
+    </p>
+
+    <h2>Export</h2>
+    <p>
+      The currently displayed network can be exported in <a href="https://en.wikipedia.org/wiki/GraphML">GraphML</a> format.
+      This can be opened in most graph software, such as <a href="https://gephi.org/">Gephi</a> or <a href="https://cytoscape.org/">Cytoscape</a>.
+      One caveat is however that different software might render the file differently.
+      In some cases it might not be able to have a mix of directed and undirected edges or node names might be missing.
+    </p>
+
+    <h2>Citation</h2>
+    <p>
+      If you find this resource useful, please consider citing the following publication in your work:
+    </p>
+    <blockquote>
+      <p>To come&hellip;</p>
+    </blockquote>
+  </main>
+</body>
+</html>
