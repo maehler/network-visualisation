@@ -93,6 +93,10 @@ main {
   color: #00B7FF;
 }
 
+.version-string {
+  float: right;
+}
+
 #cy {
 
   width: 100%;
