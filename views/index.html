@@ -15,19 +15,19 @@
         <p>Welcome to SeedTransNet network visualization</p>
 
         <form id="module-form">
-            <label>Select network module of interest</label>
+            <label>Visualize network module</label>
             <input class="typeahead" type="text" value="" placeholder="Leave empty for whole network" name="module_input">
             <button type="submit">Visualize module</button>
         </form>
 
         <form id="gene-form">
-            <label>Select specific gene of interest</label>
+            <label>Visualize gene neighborhood</label>
             <input type="text" class="typeahead" value="" name="gene_input">
-            <button type="submit">Visualize gene</button>
+            <button type="submit">Visualize neighborhood</button>
         </form>
 
         <form id="search-form">
-            <label>Search for gene in current network</label>
+            <label>Find gene in current network</label>
             <input type="text" class="typeahead" value="" name="search_input">
             <button type="submit">Select gene of interest</button>
         </form>
@@ -37,7 +37,7 @@
             <input type="text" class="typeahead" value="" name="GO_input" placeholder="GO/Pfam annotation of choice">
             <input type="text" class="typeahead" value=""  name="color_input" placeholder="Color of choice">
             <button type="submit">Color genes of interest</button>
-            <button id="colorReset" type="submit">Reset colors of the nodes</button>
+            <button id="colorReset" type="submit">Reset node colors</button>
         </form>
 
         <form id="check">
@@ -46,11 +46,12 @@
         </form>
 
         <form id="buttons">
+            <button type="button" id="enrich">GO enrichment</button>
             <button type="button" id="sizeReset">Reset zoom</button>
             <button type="button" id="save">Save graph to .graphml</button>
-            <button type="button" id="documentation">Documentation</button>
-            <button type="button" id="enrich">GO enrichment</button>
         </form>
+
+        <a href="/documentation">Documentation</a>
     </div>
 
     <div id="myModal" class="modal">

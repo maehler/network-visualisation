@@ -1,7 +1,10 @@
 body {
   padding: 0px;
-  line-height:15px;
-  /* font: 14px "Lucida Grande", Helvetica, Arial, sans-serif; */
+}
+
+main {
+  width: 80%;
+  margin: 3em auto;
 }
 
 #alert{
@@ -55,15 +58,12 @@ body {
   width: 100%;
 }
 
-a {
-  color: #00B7FF;
-}
-
 .container{
   /* display:inline-block; */
   width:450px;
   background-color:rgba(0, 0, 0, 0.5);
   position:absolute;
+  padding-bottom: 1em;
   z-index: 1;
   color: white;
 }
@@ -78,6 +78,19 @@ a {
 
 .container form label {
   display: block;
+}
+
+.container a {
+  color: #00B7FF;
+}
+
+.container a:hover {
+  color: #d9f4ff;
+  text-decoration: none;
+}
+
+.container a:active {
+  color: #00B7FF;
 }
 
 #cy {
