@@ -1,6 +1,6 @@
-# projectHt2019Jacob
+# Gene network visualisation
 
-A proof of concept plugin for gene coexpression network with the ability to add personalized modules.
+A small web application for visualising gene networks.
 
 ## Docker
 
@@ -15,7 +15,7 @@ Then spin up the container mounting the database with the data that you want to 
 ```sh
 docker run \
     --detach \
-    --publish 80:3000 \
-    --mount type=bind,source=<database>,target=/home/node/app/databse/ignv.db \
+    --publish <host port>:3000 \
+    --mount type=bind,source=<database>,target=/home/node/app/database/ignv.db \
     <image name>
 ```

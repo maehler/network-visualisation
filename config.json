@@ -1,0 +1,8 @@
+{
+  "name": "SeedTransNet",
+  "publication": "Bing Bai, Sjors van der Horst, Nicolas Delhomme, Alexander Vergara Robles, Leónie Bentsink, Johannes Hanson (2019). Transcriptome and translatome profiling and translational network analysis during seed maturation reveals conserved transcriptional and distinct translational regulatory patterns. bioRxiv 778001; doi: https://doi.org/10.1101/778001",
+  "species": {
+    "scientific": "Arabidopsis thaliana",
+    "scientific_short": "A. thaliana"
+  }
+}
